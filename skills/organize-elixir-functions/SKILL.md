@@ -23,13 +23,13 @@ description: Organize functions in a file or across a branch.
   - prefer execution and lifecycle order over alphabetical order
   - use this default callback order: `mount/3`, `handle_params/3`, `handle_event/3`, `handle_info/2`, `handle_async/3` (and other handlers), then `render/1`
   - keep callback groups contiguous, especially `handle_event/3`, `handle_info/2`, and `handle_async/3`
-  - order `handle_event/3` clauses in workflow chronology, not alphabetical order
+  - order `handle_event/3` clauses alphabetically by event name
   - if `render/1` is not defined in the module (for example, template-backed LiveViews), skip render-ordering rules
 - LiveComponent modules:
   - prefer execution and lifecycle order over alphabetical order
   - use this default callback order: `mount/1`, `update/2`, `handle_event/3`, `handle_info/2`, `handle_async/3` (and other handlers), then `render/1`
   - keep callback groups contiguous, especially `update/2` and `handle_event/3`
-  - order `handle_event/3` clauses in workflow chronology, not alphabetical order
+  - order `handle_event/3` clauses alphabetically by event name
 - Non-LiveView modules:
   - public functions first (`def`), sorted alphabetically by function name
   - private functions second (`defp`), sorted alphabetically by function name
@@ -37,7 +37,7 @@ description: Organize functions in a file or across a branch.
 ### Structural Safety Rules
 
 - Treat all clauses of the same function name and arity as one unit.
-- Keep clause order by match specificity (specific first, broad fallback last). In the case of a tie, use alphabetical order based on the main atom involved.
+- Preserve existing pattern-match clause order unless explicitly asked to change behavior.
 - Keep callback clause groups contiguous (for example, all `handle_params/3` clauses together).
 - Keep each moved function body unchanged except for location.
 - Preserve module structure, comments, spacing conventions, and non-function code.
