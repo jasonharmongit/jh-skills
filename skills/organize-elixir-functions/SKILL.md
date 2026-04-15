@@ -16,6 +16,8 @@ description: Organize functions in a file or across a branch.
 - Changed-only mode (default):
   - only organize candidate functions touched on the current branch
   - candidate functions are newly added, renamed, or changed visibility (`def` <-> `defp`)
+  - place candidate functions in their correct location using the file's overall ordering rules
+  - do not keep candidate functions anchored near the edit area if that conflicts with proper placement
   - do not move untouched function definitions, even if out of order
 - Override mode (explicit request only):
   - organize all functions in the selected scope, including unchanged definitions
@@ -47,7 +49,7 @@ description: Organize functions in a file or across a branch.
 
 ## Output Expectations
 
-- Make the minimum movement needed to satisfy ordering rules for candidate functions.
+- Move each candidate function to its correct ordered position in the file, even when that means crossing the original change area.
 - In changed-only mode:
   - file mode: if the target file has no candidate functions, make no reordering changes
   - branch mode: skip files with no candidate functions and only modify files that need reordering
