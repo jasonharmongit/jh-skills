@@ -7,6 +7,9 @@ description: Organize functions in a file or across a branch.
 
 - File mode: if a file path is provided, only organize that file.
 - Branch mode: if no file path is provided, inspect changed files on the current branch and organize files that need updates.
+  - To see ALL changes made on the branch, always check:
+    - committed branch-only changes: `git diff --name-status "$(git merge-base HEAD main)"...HEAD`
+    - all working tree changes: `git status --short`
 
 ### Selection Mode
 
