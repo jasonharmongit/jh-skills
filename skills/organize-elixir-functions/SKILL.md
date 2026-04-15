@@ -1,5 +1,5 @@
 ---
-name: organize-functions
+name: organize-elixir-functions
 description: Organize functions in a file or across a branch.
 ---
 
