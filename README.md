@@ -2,7 +2,7 @@
 
 a directory of jason's personal skills
 
-## install all skills
+## list all skills
 
 ~~~bash
 npx skills add jasonharmongit/jh-skills --list
