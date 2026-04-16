@@ -37,7 +37,10 @@ description: Organize functions in a file or across a branch.
   - order `handle_event/3` clauses alphabetically by event name
 - Non-LiveView modules:
   - public functions first (`def`), sorted alphabetically by function name
-  - private functions second (`defp`), sorted alphabetically by function name
+  - test functions next (`test`), sorted alphabetically by test name
+  - private functions last (`defp`), sorted alphabetically by function name
+- Test modules:
+  - keep `test` blocks above private helper functions (`defp`)
 
 ### Structural Safety Rules
 
