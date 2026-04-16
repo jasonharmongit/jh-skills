@@ -57,7 +57,11 @@ mix compile --warnings-as-errors
 mix test
 ~~~
 
-Fix compile warnings and failing tests until both commands pass.
+Fix compile warnings until `mix compile --warnings-as-errors` passes.
+
+When tests fail, prefer updating the tests to match the current application behavior (assertions, fixtures, expected values) rather than changing production logic just to satisfy a test.
+
+If a failure suggests the branch behavior might be wrong, unintentional, or a bad tradeoff, stop and ask the user before you change any application logic to make a test pass. Do not just "fix" production code to green a test when the underlying change looks suspect.
 
 ---
 
