@@ -21,10 +21,6 @@ Example report line:
 
 ---
 
-IMPORTANT NOTE: bare `mix test` is **never allowed under any circumstances whatsoever**.
-
----
-
 ## Step 1 - Organize functions
 
 Read and apply the **organize-elixir-functions** skill from `~/.agents/skills/organize-elixir-functions`. Unless the user specifies otherwise (rare), you should apply it in `branch mode`
