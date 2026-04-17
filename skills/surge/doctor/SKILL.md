@@ -47,32 +47,26 @@ mix check
 
 ## Step 4 - Compile and tests
 
-### Scope: this branch only
+**In scope ("this branch"):** paths from `git diff --name-only "$(git merge-base HEAD main)"...HEAD` **and** `git status --short` (staged + unstaged). Nothing else.
 
-**Run only tests that cover the changes on the current branch** (the branch you are on right now, including uncommitted work). Do not run the full test suite, a broad subset, or unrelated files just to be thorough.
+**Run `mix test` only as:** explicit `*_test.exs` file arguments (one or more files). **No** bare `mix test` (forbidden unless user explicitly asked for full suite in plain language). **No** directory args (`test/`, feature folders, `apps/.../test/`) unless that **exact** directory path is in the branch list. **No** extra files, neighbors, tags, or repo-wide runs. **No** invented broader coverage if a changed `lib/` file has no counterpart test—use (1) only or ask.
 
-**Do not edit tests that are outside this branch's scope.** If a failure appears only when you run unrelated tests, do not widen the run to "fix everything"; stay within changed paths. Never change test files or assertions for code the branch did not touch.
+**Which test files:** (1) `*_test.exs` appears in branch list, or (2) conventional counterpart of a changed `lib/...` module (same path stem only—not sibling tests). **Edits:** only those same files, and only branch-related cases—**no** touch to any other test file (including format-only / "cleanup"). **Empty list** → skip `mix test`; do **not** substitute full suite or a folder.
 
-### How to pick which tests to run
+**Which failures to fix:** **Per case** (`test` / `describe` / example)—only if it clearly maps to a changed branch path or behavior. **Ignore** all other failures, including other cases in the same file (leave reds; no prod/test edits to clear them). Unsure → ask, do not edit. Optional noise reduction: `mix test path/to/file.exs:LINE` for branch-related lines only—still **never** fix unrelated failures.
 
-1. List branch-changed paths (include uncommitted work): `git diff --name-only "$(git merge-base HEAD main)"...HEAD` plus `git status --short` for unstaged paths.
-2. Run `mix test` only for specific files or directories that map to those changes (e.g. `test/...` files that appear in the diff, or the inferred `test/` paths for changed `lib/` modules). If nothing test-related changed, run the minimal set that still exercises the changed code paths (and nothing more).
+**Compile:** `mix compile --warnings-as-errors` until clean.
 
 ~~~bash
 mix compile --warnings-as-errors
-mix test path/to/relevant_test.exs
+mix test test/my_app/widgets/foo_test.exs
 ~~~
 
-Use one or more concrete paths as needed; **do not** run bare `mix test` for doctor unless the user explicitly asked for the full suite.
-
-Fix compile warnings until `mix compile --warnings-as-errors` passes.
-
-When a **branch-scoped** test fails, prefer updating that test to match the current application behavior (assertions, fixtures, expected values) rather than changing production logic just to satisfy a test—only when that test is part of the branch's scope.
-
-If a failure suggests the branch behavior might be wrong, unintentional, or a bad tradeoff, stop and ask the user before you change any application logic to make a test pass. Do not just "fix" production code to green a test when the underlying change looks suspect.
+**Branch-related red:** prefer tightening **that case** (assertions, fixtures, expected values) over weakening prod. **If prod change looks wrong / suspect / bad tradeoff** → stop and ask before changing application code to green a test.
 
 ---
 
 ## Notes
 
 - If you get stuck in any loops or complex problems that you are having to make large or risky changes for, stop and ask the user for help.
+- Doctor is **not** a green-the-whole-repo pass: it is **compile + only branch-tied test files + only edits to branch-related test cases** inside those files (other cases in the same file can stay red). Anything broader is a mistake.
