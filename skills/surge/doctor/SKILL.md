@@ -21,6 +21,10 @@ Example report line:
 
 ---
 
+IMPORTANT NOTE: bare `mix test` is **never allowed under any circumstances whatsoever**.
+
+---
+
 ## Step 1 - Organize functions
 
 Read and apply the **organize-elixir-functions** skill from `~/.agents/skills/organize-elixir-functions`. Unless the user specifies otherwise (rare), you should apply it in `branch mode`
@@ -47,8 +51,9 @@ mix check
 
 ## Step 4 - Compile and tests
 
+- **!!!ABSOLUTELY CRITICAL RULE!!!:** bare `mix test` is **never allowed under any circumstances whatsoever**.
+
 - **Scope only:** branch-changed paths from `git diff --name-only "$(git merge-base HEAD main)"...HEAD` + `git status --short`.
-- **Absolute rule:** bare `mix test` is **never allowed under any circumstances whatsoever**.
 - **Test run shape:** only explicit `*_test.exs` file args. No directory args. No repo-wide runs. No "extra confidence" runs.
 - **Allowed files only:** test file in branch diff, or direct counterpart of changed `lib/...` module (same path stem). No sibling or neighbor tests.
 - **Empty allowed list:** skip this step.
@@ -70,3 +75,4 @@ mix test <file path>
 
 - If you get stuck in any loops or complex problems that you are having to make large or risky changes for, stop and ask the user for help.
 - Doctor is **not** a green-the-whole-repo pass: it is **compile + only branch-tied test files + only edits to branch-related test cases** inside those files (other cases in the same file can stay red). Anything broader is a mistake.
+- REMINDER - bare `mix test` is **never allowed under any circumstances whatsoever**.
