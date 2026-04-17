@@ -47,19 +47,27 @@ mix check
 
 ## Step 4 - Compile and tests
 
-### Tests relevant to the branch
+### Scope: this branch only
+
+**Run only tests that cover the changes on the current branch** (the branch you are on right now, including uncommitted work). Do not run the full test suite, a broad subset, or unrelated files just to be thorough.
+
+**Do not edit tests that are outside this branch's scope.** If a failure appears only when you run unrelated tests, do not widen the run to "fix everything"; stay within changed paths. Never change test files or assertions for code the branch did not touch.
+
+### How to pick which tests to run
 
 1. List branch-changed paths (include uncommitted work): `git diff --name-only "$(git merge-base HEAD main)"...HEAD` plus `git status --short` for unstaged paths.
-2. Prefer running `mix test` with specific files or directories that correspond to changed application code (e.g. `test/...` files touched, or inferred paths under `test/` for changed `lib/` modules).
+2. Run `mix test` only for specific files or directories that map to those changes (e.g. `test/...` files that appear in the diff, or the inferred `test/` paths for changed `lib/` modules). If nothing test-related changed, run the minimal set that still exercises the changed code paths (and nothing more).
 
 ~~~bash
 mix compile --warnings-as-errors
-mix test
+mix test path/to/relevant_test.exs
 ~~~
+
+Use one or more concrete paths as needed; **do not** run bare `mix test` for doctor unless the user explicitly asked for the full suite.
 
 Fix compile warnings until `mix compile --warnings-as-errors` passes.
 
-When tests fail, prefer updating the tests to match the current application behavior (assertions, fixtures, expected values) rather than changing production logic just to satisfy a test.
+When a **branch-scoped** test fails, prefer updating that test to match the current application behavior (assertions, fixtures, expected values) rather than changing production logic just to satisfy a test—only when that test is part of the branch's scope.
 
 If a failure suggests the branch behavior might be wrong, unintentional, or a bad tradeoff, stop and ask the user before you change any application logic to make a test pass. Do not just "fix" production code to green a test when the underlying change looks suspect.
 
