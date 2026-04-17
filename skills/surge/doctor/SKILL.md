@@ -54,6 +54,7 @@ mix check
 - **Empty allowed list:** skip this step.
 - **CRITICAL - Fix scope is per test case, not per file:** only fix a failing case when it is **DIRECTLY** related to branch application-code changes. Other failures in same file: ignore, leave red.
 - **No out-of-scope edits:** no changes to unrelated test cases, unrelated test files, or production code for unrelated failures.
+- **Pre-edit gate (required):** before any test file change, announce the exact test-case edit you plan to make and cite the specific app-code path + branch diff hunk that directly justifies touching that case. If you cannot cite that evidence first, do not edit.
 - **Final report requirement for any file change:** include strong evidence for each changed test case - exact failing case, exact changed app-code path, and exact direct relationship. If you cannot prove that, do not edit.
 
 ~~~bash
