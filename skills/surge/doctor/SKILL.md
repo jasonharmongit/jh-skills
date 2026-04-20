@@ -23,7 +23,9 @@ Example report line:
 
 ## Step 1 - Organize functions
 
-Read and apply the **organize-elixir-functions** skill from `~/.agents/skills/organize-elixir-functions`. Unless the user specifies otherwise (rare), you should apply it in `branch mode`
+Read and apply the **organize-elixir-functions** skill from `~/.agents/skills/organize-elixir-functions`. Unless the user specifies otherwise (rare), you should apply it in `branch mode`.
+
+When determining which files changed on the branch for that step, use the same baseline as Step 4: **`git merge-base HEAD origin/main`** (not local `main`), so candidate detection matches the remote default branch.
 
 ---
 
@@ -49,7 +51,7 @@ mix check
 
 - **!!!ABSOLUTELY CRITICAL RULE!!!:** bare `mix test` is **never allowed under any circumstances whatsoever**.
 
-- **Scope only:** branch-changed paths from `git diff --name-only "$(git merge-base HEAD main)"...HEAD` + `git status --short`.
+- **Scope only:** branch-changed paths from `git diff --name-only "$(git merge-base HEAD origin/main)"...HEAD` + `git status --short`.
 - **Test run shape:** only explicit `*_test.exs` file args. No directory args. No repo-wide runs. No "extra confidence" runs.
 - **Allowed files only:** test file in branch diff, or direct counterpart of changed `lib/...` module (same path stem). No sibling or neighbor tests.
 - **Empty allowed list:** skip this step.
