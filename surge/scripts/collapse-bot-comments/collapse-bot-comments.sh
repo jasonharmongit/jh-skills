@@ -1,39 +1,32 @@
 #!/usr/bin/env bash
 # Collapse latest claude[bot] and greptile-apps[bot] issue comments on the current
-# branch's PR (or on --pr NUMBER). Install as `cbc`: see README.md in this directory.
+# branch's PR, or an explicit NUMBER. Install as `cbc`: see README.md.
 
 # Exit on failed commands / unset vars; pipeline fails if any stage fails.
 set -euo pipefail
 
 usage() {
-  echo "Usage: $0 [--pr NUMBER]" >&2
+  echo "Usage: $0 [NUMBER]" >&2
   exit 1
 }
 
 _pr=""
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    --pr)
-      [[ -n "${2:-}" ]] || usage
-      _pr=$2
-      shift 2
-      ;;
-    *)
-      usage
-      ;;
-  esac
-done
-
-if [[ -n "$_pr" ]] && ! [[ "$_pr" =~ ^[0-9]+$ ]]; then
-  echo "Invalid --pr (expected a positive integer): ${_pr}" >&2
-  exit 1
+if [[ $# -gt 1 ]]; then
+  usage
+fi
+if [[ $# -eq 1 ]]; then
+  if [[ "$1" =~ ^[0-9]+$ ]]; then
+    _pr=$1
+  else
+    usage
+  fi
 fi
 
 _repo=$(gh repo view --json nameWithOwner -q .nameWithOwner)
 
 if [[ -z "$_pr" ]]; then
   _pr=$(gh pr view --json number -q .number 2>/dev/null) || {
-    echo "No PR linked to the current branch (gh pr view failed). Pass --pr NUMBER." >&2
+    echo "No PR linked to the current branch (gh pr view failed). Pass NUMBER." >&2
     exit 1
   }
 fi

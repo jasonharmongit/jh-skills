@@ -41,10 +41,8 @@ Run from a **git checkout inside the target repo** (so `gh repo view` resolves `
 cbc
 ```
 
-2. **Explicit PR** - pass the PR number when the branch is not linked to a PR, or you want a different PR in the same repo:
+2. **Explicit PR** - pass the PR number as the only argument when the branch is not linked to a PR, or you want a different PR in the same repo:
 
 ```bash
-cbc --pr 42
+cbc 42
 ```
-
-Only `--pr` is supported; any other argument prints a short usage line and exits with status 1.
