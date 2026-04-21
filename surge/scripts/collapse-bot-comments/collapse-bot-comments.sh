@@ -5,6 +5,9 @@
 # Exit on failed commands / unset vars; pipeline fails if any stage fails.
 set -euo pipefail
 
+# gh opens $PAGER (usually less) for long `gh api` JSON; avoid trapping the user in the pager.
+export GH_PAGER=cat
+
 usage() {
   echo "Usage: $0 [NUMBER]" >&2
   exit 1
@@ -72,9 +75,12 @@ ${_rest}
 
   # JSON body on stdin handles multiline text; shell -f body=... is brittle here.
   jq -n --arg body "$_new_body" '{body: $body}' \
-    | gh api --method PATCH "repos/${_repo}/issues/comments/${_comment_id}" --input -
+    | gh api --method PATCH "repos/${_repo}/issues/comments/${_comment_id}" --input - \
+      >/dev/null
 }
 
 # Order: Claude first, then Greptile.
 maybe_collapse_latest_issue_comment 'claude[bot]' 0
 maybe_collapse_latest_issue_comment 'greptile-apps[bot]' 1
+
+echo completed successfully
