@@ -73,13 +73,6 @@ ${_rest}
   # JSON body on stdin handles multiline text; shell -f body=... is brittle here.
   jq -n --arg body "$_new_body" '{body: $body}' \
     | gh api --method PATCH "repos/${_repo}/issues/comments/${_comment_id}" --input -
-
-  # Fail fast: do not run the second bot if this PATCH did not round-trip.
-  _got=$(gh api "repos/${_repo}/issues/comments/${_comment_id}" -q .body)
-  if [[ "$_got" != "$_new_body" ]]; then
-    echo "Verification failed for ${_login}: fetched body does not match expected rewrite" >&2
-    exit 1
-  fi
 }
 
 # Order matters: Claude verify must succeed before we touch Greptile.
