@@ -35,7 +35,7 @@ fi
 maybe_collapse_latest_issue_comment() {
   local _login=$1
   local _strip_details=$2
-  local _comment _comment_id _body _first_line _rest _new_body _got
+  local _comment _comment_id _body _first_line _rest _new_body
 
   # PR comments live under issues/{n}/comments. `gh -q` takes one jq string only; it does
   # not support `jq --arg`, so pass JSON through to jq for $login and pagination flattening.
@@ -75,6 +75,6 @@ ${_rest}
     | gh api --method PATCH "repos/${_repo}/issues/comments/${_comment_id}" --input -
 }
 
-# Order matters: Claude verify must succeed before we touch Greptile.
+# Order: Claude first, then Greptile.
 maybe_collapse_latest_issue_comment 'claude[bot]' 0
 maybe_collapse_latest_issue_comment 'greptile-apps[bot]' 1
