@@ -23,6 +23,7 @@ Keep the first line of the comment visible and collapse all remaining content un
      - `<details>`
      - content
      - `</details>`
+   - Note: Do NOT write any local files. Do any writing you need in memory.
 6. For Greptile templates, remove stray internal `</details>` tags so there is only one closing tag at the end.
 7. Verify by fetching the comment again and checking body text.
 
@@ -32,3 +33,4 @@ Keep the first line of the comment visible and collapse all remaining content un
 - Do not JSON-escape the body into a quoted string when presenting results.
 - Use a plain `gh api --method PATCH ... -f body="..."` call.
 - Use full permissions for the command, not the sandbox.
+- Do NOT give any kind of report of what you did after you are done. Simply respond with the single word "Done"
