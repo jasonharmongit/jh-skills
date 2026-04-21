@@ -1,16 +1,42 @@
 #!/usr/bin/env bash
 # Collapse latest claude[bot] and greptile-apps[bot] issue comments on the current
-# branch's PR.
+# branch's PR (or on --pr NUMBER). Install as `cbc`: see README.md in this directory.
 
 # Exit on failed commands / unset vars; pipeline fails if any stage fails.
 set -euo pipefail
 
-# Current checkout must be a git repo with a default remote PR for this branch.
-_repo=$(gh repo view --json nameWithOwner -q .nameWithOwner)
-_pr=$(gh pr view --json number -q .number 2>/dev/null) || {
-  echo "No PR linked to the current branch (gh pr view failed)." >&2
+usage() {
+  echo "Usage: $0 [--pr NUMBER]" >&2
   exit 1
 }
+
+_pr=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --pr)
+      [[ -n "${2:-}" ]] || usage
+      _pr=$2
+      shift 2
+      ;;
+    *)
+      usage
+      ;;
+  esac
+done
+
+if [[ -n "$_pr" ]] && ! [[ "$_pr" =~ ^[0-9]+$ ]]; then
+  echo "Invalid --pr (expected a positive integer): ${_pr}" >&2
+  exit 1
+fi
+
+_repo=$(gh repo view --json nameWithOwner -q .nameWithOwner)
+
+if [[ -z "$_pr" ]]; then
+  _pr=$(gh pr view --json number -q .number 2>/dev/null) || {
+    echo "No PR linked to the current branch (gh pr view failed). Pass --pr NUMBER." >&2
+    exit 1
+  }
+fi
 
 # One bot per call: rewrite that bot's latest *issue* comment, or return 0 if none.
 maybe_collapse_latest_issue_comment() {
