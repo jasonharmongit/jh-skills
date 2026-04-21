@@ -37,10 +37,12 @@ maybe_collapse_latest_issue_comment() {
   local _strip_details=$2
   local _comment _comment_id _body _first_line _rest _new_body _got
 
-  # PR comments live under issues/{n}/comments; --paginate merges pages into one array.
-  _comment=$(gh api "repos/${_repo}/issues/${_pr}/comments" --paginate --jq --arg login "$_login" '
-    map(select(.user.login == $login)) | sort_by(.updated_at) | last
-  ')
+  # PR comments live under issues/{n}/comments. `gh -q` takes one jq string only; it does
+  # not support `jq --arg`, so pass JSON through to jq for $login and pagination flattening.
+  _comment=$(
+    gh api "repos/${_repo}/issues/${_pr}/comments" --paginate --slurp |
+      jq --arg login "$_login" 'flatten | map(select(.user.login == $login)) | sort_by(.updated_at) | last'
+  )
 
   # Empty match → jq `last` is null — not an error (other bot may still have a comment).
   if [[ "$_comment" == "null" ]]; then
