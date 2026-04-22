@@ -10,6 +10,7 @@ For every step, follow this exact order:
 1. Announce the step.
 2. Run the step and fix failures until it passes.
 3. Give a very brief report of changes made in that step.
+4. If changes were made in that step, pause and await user review before continuing.
 
 Example announce line:
 
@@ -18,6 +19,10 @@ Example announce line:
 Example report line:
 
 **Step 3 report:** `lib/surge/foo.ex` - removed unused alias; wrapped side effect in `after` callback.
+
+Example pause line:
+
+Awaiting user review. Just say 'next' to proceed.
 
 ---
 
