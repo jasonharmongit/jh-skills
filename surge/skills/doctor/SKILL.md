@@ -10,7 +10,7 @@ For every step, follow this exact order:
 1. Announce the step.
 2. Run the step and fix failures until it passes.
 3. Give a very brief report of changes made in that step.
-4. Before starting the next step, call **`AskQuestion`** so the user can click instead of typing. If they choose **No**, stop the doctor sequence (do not run later steps). If they choose **Yes**, continue.
+4. If any changes were made, call **`AskQuestion`** so the user can click instead of typing. If they choose **No**, stop the doctor sequence (do not run later steps). If they choose **Yes**, continue.
 
 `AskQuestion` arguments for the gate after step `N` (where `N` is 1, 2, or 3):
 
