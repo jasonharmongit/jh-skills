@@ -10,7 +10,12 @@ For every step, follow this exact order:
 1. Announce the step.
 2. Run the step and fix failures until it passes.
 3. Give a very brief report of changes made in that step.
-4. If changes were made in that step, pause and await user review before continuing.
+4. Before starting the next step, call **`AskQuestion`** so the user can click instead of typing. If they choose **No**, stop the doctor sequence (do not run later steps). If they choose **Yes**, continue.
+
+`AskQuestion` arguments for the gate after step `N` (where `N` is 1, 2, or 3):
+
+- `title`: `Doctor: Step {N} completed`
+- `questions`: one question with `id` `doctor_proceed`, `prompt` `Proceed to step {N+1}?`, and two options: `id` `yes` / `label` `Yes`, and `id` `no` / `label` `No`
 
 Example announce line:
 
@@ -20,10 +25,6 @@ Example report line:
 
 **Step 3 report:** `lib/surge/foo.ex` - removed unused alias; wrapped side effect in `after` callback.
 
-Example pause line:
-
-Awaiting user review. Just say 'next' to proceed.
-
 ---
 
 ## Step 1 - Organize functions
@@ -32,7 +33,7 @@ Read and apply the **organize-elixir-functions** skill from `~/.agents/skills/or
 
 When determining which files changed on the branch for that step, use the same baseline as Step 4: **`git merge-base HEAD origin/main`** (not local `main`), so candidate detection matches the remote default branch.
 
-Then stop. Wait for the user's approval to proceed to the next.
+If changes were made, call `AskQuestion` (after step 1 gate above). If **No**, stop.
 
 ---
 
@@ -44,7 +45,7 @@ mix format
 
 One `mix format` run applies all formatting the tool can do; a second pass is only needed if the first run failed (for example syntax errors) or you changed files after formatting.
 
-Then stop. Wait for the user's approval to proceed to the next.
+If changes were made, call `AskQuestion` (after step 2 gate: title `Doctor: Step 2 completed`, prompt `Proceed to step 3?`). If **No**, stop.
 
 ---
 
@@ -54,7 +55,7 @@ Then stop. Wait for the user's approval to proceed to the next.
 mix check
 ~~~
 
-Then stop. Wait for the user's approval to proceed to the next.
+If changes were made, call `AskQuestion` (after step 3 gate: title `Doctor: Step 3 completed`, prompt `Proceed to step 4?`). If **No**, stop.
 
 ---
 
