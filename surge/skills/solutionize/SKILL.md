@@ -133,6 +133,8 @@ Write only the phased implementation sketch.
 
 Sketch only changes that are required to deliver the chosen approach as settled in step 3. Do not add phases or bullets for speculative defaults, defensive patterns, or "just in case" hardening unless the partner explicitly locked that work in step 3.
 
+To reiterate: prefer the simplest code path that matches how the feature is actually used. Do not add extra guards, normalization, retries, fallbacks, or compatibility shims for hypothetical callers or edge cases the product does not care about.
+
 Per phase, include only:
 
 ### Phase 1 - <Title>
