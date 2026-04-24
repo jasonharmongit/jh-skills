@@ -32,6 +32,8 @@ Read and apply the **organize-elixir-functions** skill from `~/.agents/skills/or
 
 When determining which files changed on the branch for that step, use the same baseline as Step 4: **`git merge-base HEAD origin/main`** (not local `main`), so candidate detection matches the remote default branch.
 
+Then stop. Wait for the user's approval to proceed to the next.
+
 ---
 
 ## Step 2 - Format
@@ -42,6 +44,8 @@ mix format
 
 One `mix format` run applies all formatting the tool can do; a second pass is only needed if the first run failed (for example syntax errors) or you changed files after formatting.
 
+Then stop. Wait for the user's approval to proceed to the next.
+
 ---
 
 ## Step 3 - `mix check`
@@ -49,6 +53,8 @@ One `mix format` run applies all formatting the tool can do; a second pass is on
 ~~~bash
 mix check
 ~~~
+
+Then stop. Wait for the user's approval to proceed to the next.
 
 ---
 
