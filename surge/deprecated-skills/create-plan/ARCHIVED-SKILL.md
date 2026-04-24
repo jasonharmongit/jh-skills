@@ -1,8 +1,6 @@
 ---
 name: create-plan
 description: Creates a phased implementation plan
-metadata:
-  internal: true
 ---
 
 # Create plan
