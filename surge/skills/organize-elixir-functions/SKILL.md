@@ -43,9 +43,10 @@ description: Organize functions in a file or across a branch.
   - order `handle_event/3` clauses alphabetically by event name
 - Non-LiveView modules:
   - public functions first (`def`), sorted alphabetically by function name
-  - test functions next (`test`), sorted alphabetically by test name
   - private functions last (`defp`), sorted alphabetically by function name
 - Test modules:
+  - order `test` blocks so the **happy path (success) case comes first** for a given behavior; place **related error-path tests immediately after** that happy path (not interleaved with other features)
+  - when reordering, keep `describe` / `test` groupings consistent with this: success scenario first, then its failure/edge cases in the same cluster
   - keep `test` blocks above private helper functions (`defp`)
 
 ### Structural Safety Rules
