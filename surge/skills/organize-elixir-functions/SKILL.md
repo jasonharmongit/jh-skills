@@ -31,23 +31,23 @@ description: Organize functions in a file or across a branch.
 ### Ordering Rules
 
 - LiveView modules:
-  - prefer execution and lifecycle order over alphabetical order
   - use this default callback order: `mount/3`, `handle_params/3`, `handle_event/3`, `handle_info/2`, `handle_async/3` (and other handlers), then `render/1`
   - keep callback groups contiguous, especially `handle_event/3`, `handle_info/2`, and `handle_async/3`
   - order `handle_event/3` clauses alphabetically by event name
   - if `render/1` is not defined in the module (for example, template-backed LiveViews), skip render-ordering rules
+  - private functions last (`defp`), sorted alphabetically by function name
 - LiveComponent modules:
-  - prefer execution and lifecycle order over alphabetical order
   - use this default callback order: `mount/1`, `update/2`, `handle_event/3`, `handle_info/2`, `handle_async/3` (and other handlers), then `render/1`
   - keep callback groups contiguous, especially `update/2` and `handle_event/3`
   - order `handle_event/3` clauses alphabetically by event name
+  - private functions last (`defp`), sorted alphabetically by function name
 - Non-LiveView modules:
   - public functions first (`def`), sorted alphabetically by function name
   - private functions last (`defp`), sorted alphabetically by function name
 - Test modules:
   - order `test` blocks so the **happy path (success) case comes first** for a given behavior; place **related error-path tests immediately after** that happy path (not interleaved with other features)
   - when reordering, keep `describe` / `test` groupings consistent with this: success scenario first, then its failure/edge cases in the same cluster
-  - keep `test` blocks above private helper functions (`defp`)
+  - private functions last (`defp`), sorted alphabetically by function name
 
 ### Structural Safety Rules
 
