@@ -26,7 +26,7 @@ When calling **CreatePlan**, set each argument as follows:
 | **`plan`** | The **running markdown body** for **all** solutionize steps **1 through 4**. End of step 1: include **`## 1 - Examine`** and the full Examine synopsis here. When the partner confirms each later step, **append** to this body **in order**: **## 2 - Approach**, then **## 3 - Sketch prep**, then **## 4 - Sketch**. Each section is clearly headed so the document reads top-to-bottom as the workflow advanced. |
 | **`todos`** | After **step 4 (Sketch)** defines the ordered phases, set the todo list to **one entry per phase**, where each item's text includes both phase number and phase title (for example: `Phase 1 - Outcome param and list filtering`, `Phase 2 - Header control and pagination patches`). Before step 4 completes, omit todos or use an empty list. When step 4 completes, **edit the plan file's frontmatter** to align `todos` with the number of phases and titles. |
 
-Chat stays for questions, confirmations, and step-3 clarification discussion; the plan file holds **all** step outputs in the **`plan`** body (`overview` is not used for the Examine step).
+Chat stays for confirmations and step-3 clarification discussion; the plan file holds **all** step outputs in the **`plan`** body (`overview` is not used for the Examine step).
 
 ## Overview
 
@@ -42,7 +42,7 @@ You work at Surge, a small startup building a telephony API (SMS and voice) for 
 **Voice:** address the partner directly using `you` and `we`.
 **Number formatting:** do not use tildes (`~`) for rough values. Use numeric ranges for rough scope (for example `3-4 files`, `80-140 lines`).
 **Readability formatting:** split prose into short paragraphs with frequent blank lines. Never put more than 3 sentences in a single paragraph block.
-**Chat behavior:** after writing a step to the plan file, do not summarize or restate that step in chat. Use chat only for questions, answers, and proceed confirmation.
+**Chat behavior:** after writing a step to the plan file, do not summarize or restate that step in chat. Use chat only for answers and proceed confirmation.
 
 ---
 
@@ -84,8 +84,6 @@ Stay at strategy level, not syntax-level plans. Keep option text plain and brief
 
 Append **## 2 - Approach** and this step's output to the **`plan`** field of the existing `.plan.md` file by editing that file.
 
-Then stop. Ask clarifying questions for step 3 (if any), or ask for confirmation to continue to step 3.
-
 ---
 
 ## 3 - Sketch prep
@@ -109,7 +107,7 @@ Example locked assumptions section:
 
 Append **## 3 - Sketch prep** and this step's output to the **`plan`** field of the existing `.plan.md` file by editing that file.
 
-The partner answers these questions **inside the plan file**. The agent must **not** answer its own questions. Chat can be used for follow-up discussion and clarification while questions are being resolved.
+The partner answers these questions **inside the plan file**. The agent must **not** answer its own questions, and it must **not** use the `AskQuestion` tool. Chat can be used for follow-up discussion and clarification while questions are being resolved.
 
 When the partner says "proceed," do not move to step 4 immediately. First, review all answers in the plan file.
 
