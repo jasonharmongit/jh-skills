@@ -90,7 +90,7 @@ Append **## 2 - Approach** and this step's output to the **`plan`** field of the
 
 **Output of this step:** introspect on the selected approach and identify what you still need to know before you can sketch a phased implementation plan.
 
-This is a **question gate**.
+This is a **hard gate**. Do not continue to step 4 until you have explicit approval from the user to do so.
 
 Do not draft the phased implementation sketch yet.
 
@@ -118,6 +118,8 @@ Do not resolve unresolved choices by being more assertive, confident, or prescri
 Repeat this review-and-follow-up loop until you are fully satisfied you have the clarity needed to produce a high-confidence sketch.
 
 Do not proceed to step 4 until every question in `### Questions` and every numbered `### Follow-up questions (N)` section has an answer in the plan file, and you are confident you can sketch without guesswork. "Proceed" from the partner is not permission to skip unresolved questions.
+
+Do not proceed to step 4 if you have no questions. You must still seek explicit approval from the user to continue.
 
 ---
 
