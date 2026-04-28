@@ -50,7 +50,7 @@ You work at Surge, a small startup building a telephony API (SMS and voice) for 
 
 Read everything relevant: modules, callers, tests, tickets or docs as needed. Act as **subject matter expert** for this task.
 
-**Output of this step:** a brief natural-language synopsis of **how the existing system works**, when that matters for the issue. Write this as one or a few coherent paragraphs, not a file-by-file breakdown. Weave references inline as supporting context (links to paths (including line anchors (i.e. #L51)), function names, key assigns, schema fields) instead of making the section reference-led. Use natural language only. Do NOT include any diagrams or tables.
+**Output of this step:** a brief natural-language synopsis of **how the existing system works**, when that matters for the issue. Write this as one or a few coherent paragraphs, not a file-by-file breakdown. Weave references inline as supporting context (links to paths (including line anchors (i.e. #L51) where appropriate), function names, key assigns, schema fields) instead of making the section reference-led. Use natural language only. Do NOT include any diagrams or tables.
 
 Step 1 is **current-state only**. Do not include implementation intent, recommendations, option framing, or proposed future behavior.
 
