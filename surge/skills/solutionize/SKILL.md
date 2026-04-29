@@ -167,10 +167,15 @@ Per phase, include only:
 ### Phase 1 - <Title>
 **Objective:** exactly one sentence.
 - [Module.Or.Function](relative/path/to/file.ex)
-  - **updated_function_name** - concrete implementation details.
-  - **new_function_name** - concrete implementation details.
+  - **updated_function_name**
+    - One nested bullet per distinct logical point (ordering, data read, branch, side effect, callee).
+    - Another point on its own line; do not chain many clauses in one dash.
+  - **new_function_name**
+    - Same pattern: scan-friendly vertical list, not a wall of prose.
 
 Then continue in order as `Phase 2`, `Phase 3`, and so on.
+
+**Bullet hierarchy (step 4):** After the file link, each **symbol or named area** (for example **perform/1**, **send_message/4**, **Oban queues**) gets its own sub-bullet. Under that, use **one further indentation level** so **each new logical point** is its own line: inputs, preload, branch condition, transaction boundary, enqueue choice, cleanup, retry vs terminal failure, and so on. Avoid semicolon chains and single paragraphs that bundle unrelated beats—if you would separate ideas with "then" or "otherwise" in speech, they belong on separate nested bullets.
 
 Do not write vague bullets like "update logic" or "wire this up". Every bullet must name the exact symbol or code area being changed.
 
@@ -183,11 +188,20 @@ Example phase:
 ### Phase 1 - Outcome param and list filtering
 **Objective:** Add URL-backed status-category filtering to the paginated API logs list.
 - [SurgeWeb.ApiRequestLive.Index](lib/surge_web/live/api_request_live/index.ex)
-  - **handle_params/3** - read `status_category` from params, normalize unknown values, and keep `request_id` behavior unchanged.
-  - **load_paginated_requests/3** - map `status_category` (`all`, `success`, `failed`) to Flop filters on `status` before `Flop.validate!/2`.
+  - **handle_params/3**
+    - Read `status_category` from params.
+    - Normalize unknown values to the default category.
+    - Keep `request_id` behavior unchanged.
+  - **load_paginated_requests/3**
+    - Map `status_category` (`all`, `success`, `failed`) to Flop filters on `status`.
+    - Run that mapping before `Flop.validate!/2`.
 - [SurgeWeb.ApiRequestLive.Index](lib/surge_web/live/api_request_live/index.html.heex)
-  - **render/1** - add a dropdown for `status_category` in header actions and patch URLs so pagination/search keeps the selected value.
+  - **render/1**
+    - Add a dropdown for `status_category` in header actions.
+    - Patch URLs so pagination and search keep the selected value.
 - [SurgeWeb.ApiRequestLiveTest](test/surge_web/live/api_request_live_test.exs)
-  - **outcome filtering and invalid status_category** - add coverage for success/failed filtering and invalid `status_category` URL handling.
+  - **outcome filtering and invalid status_category**
+    - Cover success and failed filtering.
+    - Cover invalid `status_category` in the URL.
 
 Append **## 4 - Sketch** and this step's output to the **`plan`** portion of the same `.plan.md` file. **Edit the YAML frontmatter** and set **`todos`** to one item per phase, in order, with each todo **content** in the format `Phase N - <Title>`.
