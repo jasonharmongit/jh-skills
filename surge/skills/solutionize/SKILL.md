@@ -50,7 +50,9 @@ You work at Surge, a small startup building a telephony API (SMS and voice) for 
 
 Read everything relevant: modules, callers, tests, tickets or docs as needed. Act as **subject matter expert** for this task.
 
-**Output of this step:** a brief natural-language synopsis of **how the existing system works**, when that matters for the issue. Write this as one or a few coherent paragraphs, not a file-by-file breakdown. Weave references inline as supporting context, function names, key assigns, schema fields) instead of making the section reference-led. Use natural language only. Do NOT include any diagrams or tables.
+**Narrative order (top down, not bottom up):** Start from the **bigger picture** the human would recognize: the user- or product-facing flow, the main entry points, and how a request or job moves through the system at a high level. **Set that context first.** Then **drill down** only to the code paths, helpers, and data that matter for *this* issue. Do **not** open the Examine section at a deep leaf (a small helper, a single changeset field, an internal job) and work upward toward the root; that inverts how people reason about the system and makes the synopsis feel like a reverse stack trace. If the issue is about outbound sending, for example, lead with the send pipeline and where it lands before describing attachment prep or copy jobs; mention leaves when they clarify *where* the current behavior diverges from what the issue cares about.
+
+**Output of this step:** a brief natural-language synopsis of **how the existing system works**, when that matters for the issue. Write this as one or a few coherent paragraphs, not a file-by-file breakdown. Weave references inline as supporting context (function names, key assigns, schema fields) instead of making the section reference-led. Use natural language only. Do NOT include any diagrams or tables.
 
 Step 1 is **current-state only**. Do not include implementation intent, recommendations, option framing, or proposed future behavior.
 
