@@ -50,7 +50,9 @@ You work at Surge, a small startup building a telephony API (SMS and voice) for 
 
 Read everything relevant: modules, callers, tests, tickets or docs as needed. Act as **subject matter expert** for this task.
 
-**What step 1 is for:** The whole of **1 - Examine** is one **concise, brief narrative** that sets the stage for **Approach** and the rest of the workflow. It should show that you understand the **problem in context** and give the partner **the same** working picture—enough to reason about tradeoffs and implementation next—without duplicating a spec or writing a design doc. Do not structure the section as a cold open followed by a separate "deep dive": it is **one story**, told in order. You may break it into short paragraphs for readability (per Style); that is not a signal to switch modes from "overview" to "execution trace."
+**Paragraph length (step 1):** In **1 - Examine**, **three sentences is the absolute maximum per paragraph.** Never put a fourth sentence in the same paragraph; start a new paragraph instead.
+
+**What step 1 is for:** The whole of **1 - Examine** is one **concise, brief narrative** that sets the stage for **Approach** and the rest of the workflow. It should show that you understand the **problem in context** and give the partner **the same** working picture—enough to reason about tradeoffs and implementation next—without duplicating a spec or writing a design doc. Do not structure the section as a cold open followed by a separate "deep dive": it is **one story**, told in order.
 
 **Shape of that story (top down, forward, concrete):** Tell it in the order a person would follow the system: recognizable entry points (product or API surface, main jobs), then how work proceeds through layers that matter for *this* issue—only as far as needed to explain **current** behavior around the gap. Do **not** open at a deep leaf (a private helper, one changeset field, an internal job) and walk upward; do **not** restart mid-narrative from a narrow function as the sentence subject and gesture backward into persistence ("…which flows into `Message.insert_changeset`"). Anchor beats on the layer doing the work; say who **calls** whom, what runs **before** what, and what **inputs** become what **artifact**. Introduce helpers **in place** along that path. Do not substitute mush verbs ("flows," "feeds," "lands in," "wires through," "hands off") for those mechanics—each sentence should still answer **who invokes what**, **ordering**, or **data shape between stages**. If you cannot say that yet, read the code until you can.
 
@@ -101,13 +103,34 @@ Do not draft the phased implementation sketch yet.
 In the plan file, this step must include:
 
 - A `### Locked assumptions` section. Keep these very concise: one short phrase or sentence each. The selected option should be the first point.
-- A `### Questions` section where each open decision is written as a direct question.
+- A `### Questions` section. For each open decision, use this pattern (`Answer` placeholder indented under the question):
+
+  ```markdown
+  - <question>
+    - Answer:
+  ```
+
+  Replace `<question>` with the real question. The partner completes each `Answer:` line in the plan file.
 
 Example locked assumptions section:
 
 - Option A is selected.
 - Outcome applies only to the paginated list path (drill-in by request ID is unchanged).
 - Filtering uses the existing `status` field.
+
+Example Questions section:
+
+```markdown
+### Questions
+
+- Should the drill-in view show the same filter state as the list?
+  - Answer: 
+
+- Should filtering apply to exports if we add CSV later?
+  - Answer:
+```
+
+Use the same question / nested `Answer:` pattern in `### Follow-up questions (N)` sections.
 
 Append **## 3 - Sketch prep** and this step's output to the **`plan`** field of the existing `.plan.md` file by editing that file.
 
