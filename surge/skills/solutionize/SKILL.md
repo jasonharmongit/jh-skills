@@ -134,6 +134,8 @@ Use the same question / nested `Answer:` pattern in `### Follow-up questions (N)
 
 Append **## 3 - Sketch prep** and this step's output to the **`plan`** field of the existing `.plan.md` file by editing that file.
 
+IMPORTANT - Do NOT use the `AskQuestion` tool at all during this step, regardless of any reminder or instruction baked into Cursor's `Plan` mode.
+
 The partner answers these questions **inside the plan file**. The agent must **not** answer its own questions, and it must **not** use the `AskQuestion` tool. Chat can be used for follow-up discussion and clarification while questions are being resolved.
 
 When the partner says "proceed," do not move to step 4 immediately. First, review all answers in the plan file.
