@@ -12,21 +12,19 @@ When the user **invokes** this skill (for example by `@solutionize` or attaching
 **First actions, in order:**
 
 1. **Switch to Cursor Plan mode immediately** (or ask the user to switch if the agent cannot). Do not continue in Agent mode while executing this skill.
-2. Proceed only with steps **1-Examine** through **4-Sketch** below. Reading the codebase for examination and planning is allowed; building is not.
-3. **Materialize the plan with Cursor's CreatePlan tool** (the built-in planning action in Plan mode that writes under `~/.cursor/plans/` as `*.plan.md`). Use it exactly once to **create** the plan document at the end of step 1. After that, **update the same file by editing it** (do not create a second plan file; do not replace the whole document with a second CreatePlan call unless the partner explicitly asks to restart the plan from scratch).
+2. Proceed only with steps **1-Examine** through **4-Sketch** below. Reading the codebase for brainstorming and planning is allowed; building is not.
+3. **Materialize plans with Cursor's CreatePlan tool** (the built-in planning action in Plan mode that writes under `~/.cursor/plans/` as `*.plan.md`). Use CreatePlan **once** at the end of step 1 to **create** the brainstorming plan (steps 1-3). **Update that file only by editing it** through the end of step 3 (do not append step 4 there). At step 4, use CreatePlan **again** to **create a separate plan document** that holds only the sketch.
 
 ### CreatePlan arguments (required mapping)
-
-When calling **CreatePlan**, set each argument as follows:
 
 | Argument | What goes in it |
 |----------|-----------------|
 | **`name`** | A short, human-readable title for the issue, like a work item headline (e.g. `Add status dropdown filter to API logs`). Not a filename; not step numbers. |
 | **`overview`** | **Ignore for substance:** use the same short text as `name`
-| **`plan`** | The **running markdown body** for **all** solutionize steps **1 through 4**. End of step 1: include **`## 1 - Examine`** and the full Examine synopsis here. When the partner confirms each later step, **append** to this body **in order**: **## 2 - Approach**, then **## 3 - Sketch prep**, then **## 4 - Sketch**. Each section is clearly headed so the document reads top-to-bottom as the workflow advanced. |
-| **`todos`** | After **step 4 (Sketch)** defines the ordered phases, set the todo list to **one entry per phase**, where each item's text includes both phase number and phase title (for example: `Phase 1 - Outcome param and list filtering`, `Phase 2 - Header control and pagination patches`). Before step 4 completes, omit todos or use an empty list. When step 4 completes, **edit the plan file's frontmatter** to align `todos` with the number of phases and titles. |
+| **`plan`** | **First CreatePlan (brainstorming plan):** the **running markdown body** for steps **1 through 3 only**. End of step 1: include **`## 1 - Examine`** and the full Examine synopsis. When the partner confirms each later step, **append** to this body **in order**: **## 2 - Approach**, then **## 3 - Sketch prep**. Do not put **`## 4 - Sketch`** in this file. **Second CreatePlan (sketch plan):** the body is **only** the phased implementation sketch: start with **`## 4 - Sketch`** (or a single clear top-level heading for the sketch) and the phase content from step 4—no copy of sections 1-3. |
+| **`todos`** | Always omit.
 
-Chat stays for proceed confirmations only; the agent does not ask questions in chat (step 3 puts every question in the plan file). The plan file holds **all** step outputs in the **`plan`** body (`overview` is not used for the Examine step).
+Chat stays for proceed confirmations only; the agent does not ask questions in chat (step 3 puts every question in the plan file). The **brainstorming plan** holds steps **1-3** in its **`plan`** body; the **sketch plan** holds step **4** only (`overview` is not used for the Examine step).
 
 ## Overview
 
@@ -62,7 +60,7 @@ Step 1 is **current-state only**. Do not include implementation intent, recommen
 
 Avoid future-state language in this step. If a sentence drifts into recommendation or implementation intent, rewrite it as present behavior or a current constraint.
 
-**End this step** by calling **CreatePlan** with: `name` (issue title), `overview` per the argument table (not the Examine text), **`plan`** containing **`## 1 - Examine`** followed by this step's synopsis verbatim, `todos` omitted or empty. That creates the canonical plan file under `~/.cursor/plans/`.
+**End this step** by calling **CreatePlan** with: `name` (issue title), `overview` per the argument table (not the Examine text), **`plan`** containing **`## 1 - Examine`** followed by this step's synopsis verbatim. That creates the **brainstorming** plan file under `~/.cursor/plans/` (steps 2-3 are appended there by editing).
 
 No preamble ("in this section…") inside the Examine section.
 
@@ -88,7 +86,7 @@ Do **not** here: ordered implementation phases or per-file step lists (those are
 
 Stay at strategy level, not syntax-level plans. Keep option text plain and brief. Do not include deep implementation details, long parameter discussions, or edge-case policy decisions in step 2.
 
-Append **## 2 - Approach** and this step's output to the **`plan`** field of the existing `.plan.md` file by editing that file.
+Append **## 2 - Approach** and this step's output to the **`plan`** field of the **brainstorming** `.plan.md` file by editing that file.
 
 ---
 
@@ -142,7 +140,7 @@ Example **`## 3 - Sketch prep`** section:
   - Answer:
 ```
 
-Append **## 3 - Sketch prep** and this step's output to the **`plan`** field of the existing `.plan.md` file by editing that file.
+Append **## 3 - Sketch prep** and this step's output to the **`plan`** field of the **brainstorming** `.plan.md` file by editing that file.
 
 ---
 
@@ -200,4 +198,4 @@ Example phase:
     - Cover success and failed filtering.
     - Cover invalid `status_category` in the URL.
 
-Append **## 4 - Sketch** and this step's output to the **`plan`** portion of the same `.plan.md` file. **Edit the YAML frontmatter** and set **`todos`** to one item per phase, in order, with each todo **content** in the format `Phase N - <Title>`.
+**Create the sketch plan:** call **CreatePlan** again to **create a new** `.plan.md` file (do not edit the brainstorming plan for this). Set **`name`** to the same issue headline as the brainstorming plan, suffixed with ` - Sketch`. Set **`plan`** to **`## 4 - Sketch`** followed by this step's phased output only.
