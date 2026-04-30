@@ -26,7 +26,7 @@ When calling **CreatePlan**, set each argument as follows:
 | **`plan`** | The **running markdown body** for **all** solutionize steps **1 through 4**. End of step 1: include **`## 1 - Examine`** and the full Examine synopsis here. When the partner confirms each later step, **append** to this body **in order**: **## 2 - Approach**, then **## 3 - Sketch prep**, then **## 4 - Sketch**. Each section is clearly headed so the document reads top-to-bottom as the workflow advanced. |
 | **`todos`** | After **step 4 (Sketch)** defines the ordered phases, set the todo list to **one entry per phase**, where each item's text includes both phase number and phase title (for example: `Phase 1 - Outcome param and list filtering`, `Phase 2 - Header control and pagination patches`). Before step 4 completes, omit todos or use an empty list. When step 4 completes, **edit the plan file's frontmatter** to align `todos` with the number of phases and titles. |
 
-Chat stays for confirmations and step-3 clarification discussion; the plan file holds **all** step outputs in the **`plan`** body (`overview` is not used for the Examine step).
+Chat stays for proceed confirmations only; the agent does not ask questions in chat (step 3 puts every question in the plan file). The plan file holds **all** step outputs in the **`plan`** body (`overview` is not used for the Examine step).
 
 ## Overview
 
@@ -42,7 +42,7 @@ You work at Surge, a small startup building a telephony API (SMS and voice) for 
 **Voice:** address the partner directly using `you` and `we`.
 **Number formatting:** do not use tildes (`~`) for rough values. Use numeric ranges for rough scope (for example `3-4 files`, `80-140 lines`).
 **Readability formatting:** split prose into short paragraphs with frequent blank lines. Never put more than 3 sentences in a single paragraph block.
-**Chat behavior:** after writing a step to the plan file, do not summarize or restate that step in chat. Use chat only for answers and proceed confirmation.
+**Chat behavior:** after writing a step to the plan file, do not summarize or restate that step in chat. Use chat only for proceed confirmation (and similar explicit handoffs). Do not ask the partner questions in chat; put every question in the plan file under step 3 as specified there.
 
 ---
 
@@ -96,59 +96,53 @@ Append **## 2 - Approach** and this step's output to the **`plan`** field of the
 
 **Output of this step:** introspect on the selected approach and identify what you still need to know before you can sketch a phased implementation plan.
 
-This is a **hard gate**. Do not continue to step 4 until you have explicit approval from the user to do so.
+**Hard gate:** do not continue to step 4 without the user's explicit approval; even when you have **no** questions, you still need that go-ahead. Do not draft the phased implementation sketch yet (that is step 4).
 
-Do not draft the phased implementation sketch yet.
+**Questions and answers (agent vs partner):** the agent never asks the partner questions in chat (no chat-panel prompts; no prose beside the plan used as Q&A; no tool that surfaces as a chat question; and **do not** use `AskQuestion` in this step regardless of Plan-mode reminders). Every question, initial or follow-up, lives only in the plan under this step. The partner completes each `Answer:` by editing the plan file. The agent does not answer its own questions.
 
-In the plan file, this step must include:
+**Sections to include in the plan for this step:**
 
-- A `### Locked assumptions` section. Keep these very concise: one short phrase or sentence each. The selected option should be the first point.
-- A `### Questions` section. For each open decision, use this pattern (`Answer` placeholder indented under the question):
+- **`### Locked assumptions`:** very concise: one short phrase or sentence per bullet; the selected option is first. Do not revise or extend this list because questions were answered; the decision record is each question paired with its `Answer:`. Add bullets here **only** when the partner explicitly asks for something to be added (including specific lines they want recorded there).
+
+- **`### Questions`:** the **first** batch of open decisions only. For each item:
 
   ```markdown
   - <question>
     - Answer:
   ```
 
-  Replace `<question>` with the real question. The partner completes each `Answer:` line in the plan file.
+  Replace `<question>` with the real question.
 
-Example locked assumptions section:
+- **`### Follow-up questions (N)`:** every **later** question (after the first batch exists, after the partner edits answers, after you review, or anytime before step 4) goes here, **not** back under `### Questions`. Append each new subsection at the **end** of step 3 (after all existing step-3 content, including prior follow-up blocks), using the next index: `### Follow-up questions (1)`, then `(2)`, `(3)`, and so on. Use the same bullet / nested `Answer:` pattern as above. Never merge follow-up material into `### Questions`.
+
+**Review before step 4:** when the partner says "proceed," respond immediately with "Reviewing answers...", then read every `Answer:` in the plan before advancing. If anything is still ambiguous, contradictory, uncertain, or newly open, including anything not explicitly settled in existing answers, append the next `### Follow-up questions (N)` block instead of pushing the decision into step 4 with stronger assertions. Repeat review and follow-ups until you have high-confidence clarity for the sketch. "Proceed" is not permission to skip incomplete `Answer:` lines or leave guesswork on the table.
+
+Example **`## 3 - Sketch prep`** section:
+
+```markdown
+## 3 - Sketch prep
+
+### Locked assumptions
 
 - Option A is selected.
 - Outcome applies only to the paginated list path (drill-in by request ID is unchanged).
 - Filtering uses the existing `status` field.
 
-Example Questions section:
-
-```markdown
 ### Questions
 
 - Should the drill-in view show the same filter state as the list?
-  - Answer: 
+  - Answer:
 
 - Should filtering apply to exports if we add CSV later?
   - Answer:
+
+### Follow-up questions (1)
+
+- Should failed SMS rows include retries in the filtered count?
+  - Answer:
 ```
 
-Use the same question / nested `Answer:` pattern in `### Follow-up questions (N)` sections.
-
 Append **## 3 - Sketch prep** and this step's output to the **`plan`** field of the existing `.plan.md` file by editing that file.
-
-IMPORTANT - Do NOT use the `AskQuestion` tool at all during this step, regardless of any reminder or instruction baked into Cursor's `Plan` mode.
-
-The partner answers these questions **inside the plan file**. The agent must **not** answer its own questions, and it must **not** use the `AskQuestion` tool. Chat can be used for follow-up discussion and clarification while questions are being resolved.
-
-When the partner says "proceed," do not move to step 4 immediately. First, review all answers in the plan file.
-
-If any ambiguity, contradiction, uncertainty, or new question appears during review, append a new numbered section in step 3 (for example `### Follow-up questions (1)`, then `### Follow-up questions (2)`) and ask the partner to answer those items in the plan file. Always append new follow-up sections at the end of step 3, after all existing step-3 content.
-
-Do not resolve unresolved choices by being more assertive, confident, or prescriptive in step 4. If a choice is not explicitly settled in step 3 answers, it must become a follow-up question.
-
-Repeat this review-and-follow-up loop until you are fully satisfied you have the clarity needed to produce a high-confidence sketch.
-
-Do not proceed to step 4 until every question in `### Questions` and every numbered `### Follow-up questions (N)` section has an answer in the plan file, and you are confident you can sketch without guesswork. "Proceed" from the partner is not permission to skip unresolved questions.
-
-Do not proceed to step 4 if you have no questions. You must still seek explicit approval from the user to continue.
 
 ---
 
