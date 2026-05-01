@@ -35,4 +35,4 @@
 - Prefer explicit control flow over conditional/no-op helpers.
   However, when a conditional/no-op helper is necessary, name it with `maybe_`.
 - CRITICAL: Always use ~~~ for formatting outermost codeblocks in your output. only use ``` for codeblocks that are nested inside.
-
+- only create a helper function if the logic is non-trivial (more than a single operation or check) AND reused. if the logic is only used in one place, inline it.
