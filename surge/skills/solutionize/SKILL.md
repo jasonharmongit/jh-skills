@@ -22,7 +22,7 @@ When the user **invokes** this skill (for example by `@solutionize` or attaching
 | **`name`** | A short, human-readable title for the issue, like a work item headline (e.g. `Add status dropdown filter to API logs`). Not a filename; not step numbers. |
 | **`overview`** | **Ignore for substance:** use the same short text as `name`
 | **`plan`** | **First CreatePlan (brainstorming plan):** the **running markdown body** for steps **1 through 3 only**. End of step 1: include **`## 1 - Examine`** and the full Examine synopsis. When the partner confirms each later step, **append** to this body **in order**: **## 2 - Approach**, then **## 3 - Sketch prep**. Do not put **`## 4 - Sketch`** in this file. **Second CreatePlan (sketch plan):** the body is **only** the phased implementation sketch: start with **`## 4 - Sketch`** (or a single clear top-level heading for the sketch) and the phase content from step 4—no copy of sections 1-3. |
-| **`todos`** | Always omit.
+| **`todos`** | **First CreatePlan (brainstorming):** omit. **Second CreatePlan (sketch):** required. Supply **one todo per phase**, in **the same order** as **`### Phase N - …`** in the sketch. Each todo's **title** must be **exactly** that phase heading's text **after** the leading `### ` and a single space (for example the todo title `Phase 1 - Outcome param and list filtering` matches `### Phase 1 - Outcome param and list filtering` in **`plan`**).
 
 Chat stays for proceed confirmations only; the agent does not ask questions in chat (step 3 puts every question in the plan file). The **brainstorming plan** holds steps **1-3** in its **`plan`** body; the **sketch plan** holds step **4** only (`overview` is not used for the Examine step).
 
@@ -198,4 +198,4 @@ Example phase:
     - Cover success and failed filtering.
     - Cover invalid `status_category` in the URL.
 
-**Create the sketch plan:** call **CreatePlan** again to **create a new** `.plan.md` file (do not edit the brainstorming plan for this). Set **`name`** to the same issue headline as the brainstorming plan, suffixed with ` - Sketch`. Set **`plan`** to **`## 4 - Sketch`** followed by this step's phased output only.
+**Create the sketch plan:** call **CreatePlan** again to **create a new** `.plan.md` file (do not edit the brainstorming plan for this). Set **`name`** to the same issue headline as the brainstorming plan, suffixed with ` - Sketch`. Set **`plan`** to **`## 4 - Sketch`** followed by this step's phased output only. Set **`todos`** per the argument table: one todo per **`### Phase N - …`** line, same order, each todo **title** equal to that heading's text after `### `.
