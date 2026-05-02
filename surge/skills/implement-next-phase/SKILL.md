@@ -1,9 +1,9 @@
 ---
-name: implement-phase
+name: implement-next-phase
 description: Prepare to implement the next pending todo phase from a solutionize sketch plan (frontmatter todos); implementation only after explicit user approval.
 ---
 
-# Implement phase
+# Implement next phase
 
 ## Invoking this skill
 

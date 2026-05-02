@@ -36,3 +36,19 @@
   However, when a conditional/no-op helper is necessary, name it with `maybe_`.
 - CRITICAL: Always use ~~~ for formatting outermost codeblocks in your output. only use ``` for codeblocks that are nested inside.
 - only create a helper function if the logic is non-trivial (more than a single operation or check) AND reused. if the logic is only used in one place, inline it.
+- Keep function and module docs concise and high level. they should describe the general purpose of the thing, not specifics about how it works internally
+- Prefer simple, concise solutions. For example, instead of
+```
+    purchaser_info_params =
+      case params["purchaser_info"] do
+        nil -> %{}
+        attrs -> attrs
+      end
+```
+
+just do 
+```
+purchaser_info_params = params["purchaser_info"] || %{}
+```
+- NEVER use an `as:` in a module alias or in a form
+- keep code on a single line whenever possible. only split if it will go over the 120 character line limit.
