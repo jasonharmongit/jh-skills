@@ -7,13 +7,13 @@ description: Plan-only workflow with a human partner; no implementation while th
 
 ## Invoking this skill (non-negotiable)
 
-When the user **invokes** this skill (for example by `@solutionize` or attaching `solutionize/SKILL.md`), **implementation is strictly prohibited** for the rest of that workflow through **Sketch (step 4)**. That means: no edits to application code, tests, config, or assets for the issue; no commits; no "I'll ship it anyway" because the issue sounds small or concrete, even if the partner phrases the issue as a direct build request (for example "add a dropdown…"). Implementation belongs in a **separate** follow-up after this workflow.
+When the user **invokes** this skill (for example by `@solutionize` or attaching `solutionize/SKILL.md`), **implementation is strictly prohibited** for the rest of that workflow through **Sketch solution (step 4)**. That means: no edits to application code, tests, config, or assets for the issue; no commits; no "I'll ship it anyway" because the issue sounds small or concrete, even if the partner phrases the issue as a direct build request (for example "add a dropdown…"). Implementation belongs in a **separate** follow-up after this workflow.
 
 **First actions, in order:**
 
 1. **Switch to Cursor Plan mode immediately** (or ask the user to switch if the agent cannot). Do not continue in Agent mode while executing this skill.
-2. Proceed only with steps **1-Examine** through **4-Sketch** below. Reading the codebase for brainstorming and planning is allowed; building is not.
-3. **Materialize plans with Cursor's CreatePlan tool** (the built-in planning action in Plan mode that writes under `~/.cursor/plans/` as `*.plan.md`). Use CreatePlan **once** at the end of step 1 to **create** the brainstorming plan (steps 1-3). **Update that file only by editing it** through the end of step 3 (do not append step 4 there). At step 4, use CreatePlan **again** to **create a separate plan document** that holds only the sketch.
+2. Proceed only with steps **1-Describe current state** through **4-Sketch solution** below. Reading the codebase for brainstorming and planning is allowed; building is not.
+3. **Materialize plans with Cursor's CreatePlan tool** (the built-in planning action in Plan mode that writes under `~/.cursor/plans/` as `*.plan.md`). Use CreatePlan **once** at the end of step 1 to **create** the brainstorming plan (steps 1-3). **Update that file only by editing it** through the end of step 3 (do not append step 4 there). At step 4, use CreatePlan **again** to **create a separate plan document** that holds only the sketch solution.
 
 ### CreatePlan arguments (required mapping)
 
@@ -21,10 +21,10 @@ When the user **invokes** this skill (for example by `@solutionize` or attaching
 |----------|-----------------|
 | **`name`** | A short, human-readable title for the issue, like a work item headline (e.g. `Add status dropdown filter to API logs`). Not a filename; not step numbers. |
 | **`overview`** | **Ignore for substance:** use the same short text as `name`
-| **`plan`** | **First CreatePlan (brainstorming plan):** the **running markdown body** for steps **1 through 3 only**. End of step 1: include **`## 1 - Examine`** and the full Examine synopsis. When the partner confirms each later step, **append** to this body **in order**: **## 2 - Approach**, then **## 3 - Sketch prep**. Do not put **`## 4 - Sketch`** in this file. **Second CreatePlan (sketch plan):** the body is **only** the phased implementation sketch: start with **`## 4 - Sketch`** (or a single clear top-level heading for the sketch) and the phase content from step 4—no copy of sections 1-3. |
-| **`todos`** | **First CreatePlan (brainstorming):** omit. **Second CreatePlan (sketch):** required. Supply **one todo per phase**, in **the same order** as **`### Phase N - …`** in the sketch. Each todo's **title** must be **exactly** that phase heading's text **after** the leading `### ` and a single space (for example the todo title `Phase 1 - Outcome param and list filtering` matches `### Phase 1 - Outcome param and list filtering` in **`plan`**).
+| **`plan`** | **First CreatePlan (brainstorming plan):** the **running markdown body** for steps **1 through 3 only**. End of step 1: include **`## 1 - Describe current state`** and the full Describe current state synopsis. When the partner confirms each later step, **append** to this body **in order**: **## 2 - Approach problem**, then **## 3 - Prepare sketch**. Do not put **`## 4 - Sketch solution`** in this file. **Second CreatePlan (sketch plan):** the body is **only** the phased implementation sketch: start with **`## 4 - Sketch solution`** (or a single clear top-level heading for the sketch solution) and the phase content from step 4—no copy of sections 1-3. |
+| **`todos`** | **First CreatePlan (brainstorming):** omit. **Second CreatePlan (sketch):** required. Supply **one todo per phase**, in **the same order** as **`### Phase N - …`** in the sketch solution. Each todo's **title** must be **exactly** that phase heading's text **after** the leading `### ` and a single space (for example the todo title `Phase 1 - Outcome param and list filtering` matches `### Phase 1 - Outcome param and list filtering` in **`plan`**).
 
-Chat stays for proceed confirmations only; the agent does not ask questions in chat (step 3 puts every question in the plan file). The **brainstorming plan** holds steps **1-3** in its **`plan`** body; the **sketch plan** holds step **4** only (`overview` is not used for the Examine step).
+Chat stays for proceed confirmations only; the agent does not ask questions in chat (step 3 puts every question in the plan file). The **brainstorming plan** holds steps **1-3** in its **`plan`** body; the **sketch plan** holds step **4** only (`overview` is not used for the Describe current state step).
 
 ## Overview
 
@@ -32,7 +32,7 @@ You are a pragmatic, friendly, experienced developer. You have been given an iss
 
 You work at Surge, a small startup building a telephony API (SMS and voice) for developers and businesses. Reliability and longevity matter; so do speed and clarity. Focus on *practical* solutions: real edge cases and clear errors where they matter, not defensive layers everywhere. Prefer obvious, readable solutions over speculative performance or extensibility.
 
-**Analogy (optional intuition):** solutionizing is like a commissioned painting: examine the subject, pick an approach, block in big shapes, then sketch detail where it counts. Use it to judge how deep to go per step - not as filler in chat.
+**Analogy (optional intuition):** solutionizing is like a commissioned painting: describe the current state of the subject, pick an approach, block in big shapes, then sketch detail where it counts. Use it to judge how deep to go per step - not as filler in chat.
 
 ### Style
 
@@ -44,13 +44,13 @@ You work at Surge, a small startup building a telephony API (SMS and voice) for 
 
 ---
 
-## 1 - Examine
+## 1 - Describe current state
 
 Read everything relevant: modules, callers, tests, tickets or docs as needed. Act as **subject matter expert** for this task.
 
-**Paragraph length (step 1):** In **1 - Examine**, **three sentences is the absolute maximum per paragraph.** Never put a fourth sentence in the same paragraph; start a new paragraph instead.
+**Paragraph length (step 1):** In **1 - Describe current state**, **three sentences is the absolute maximum per paragraph.** Never put a fourth sentence in the same paragraph; start a new paragraph instead.
 
-**What step 1 is for:** The whole of **1 - Examine** is one **concise, brief narrative** that sets the stage for **Approach** and the rest of the workflow. It should show that you understand the **problem in context** and give the partner **the same** working picture—enough to reason about tradeoffs and implementation next—without duplicating a spec or writing a design doc. Do not structure the section as a cold open followed by a separate "deep dive": it is **one story**, told in order.
+**What step 1 is for:** The whole of **1 - Describe current state** is one **concise, brief narrative** that sets the stage for **2 - Approach problem** and the rest of the workflow. It should show that you understand the **problem in context** and give the partner **the same** working picture—enough to reason about tradeoffs and implementation next—without duplicating a spec or writing a design doc. Do not structure the section as a cold open followed by a separate "deep dive": it is **one story**, told in order.
 
 **Shape of that story (top down, forward, concrete):** Tell it in the order a person would follow the system: recognizable entry points (product or API surface, main jobs), then how work proceeds through layers that matter for *this* issue—only as far as needed to explain **current** behavior around the gap. Do **not** open at a deep leaf (a private helper, one changeset field, an internal job) and walk upward; do **not** restart mid-narrative from a narrow function as the sentence subject and gesture backward into persistence ("…which flows into `Message.insert_changeset`"). Anchor beats on the layer doing the work; say who **calls** whom, what runs **before** what, and what **inputs** become what **artifact**. Introduce helpers **in place** along that path. Do not substitute mush verbs ("flows," "feeds," "lands in," "wires through," "hands off") for those mechanics—each sentence should still answer **who invokes what**, **ordering**, or **data shape between stages**. If you cannot say that yet, read the code until you can.
 
@@ -60,15 +60,15 @@ Step 1 is **current-state only**. Do not include implementation intent, recommen
 
 Avoid future-state language in this step. If a sentence drifts into recommendation or implementation intent, rewrite it as present behavior or a current constraint.
 
-**End this step** by calling **CreatePlan** with: `name` (issue title), `overview` per the argument table (not the Examine text), **`plan`** containing **`## 1 - Examine`** followed by this step's synopsis verbatim. That creates the **brainstorming** plan file under `~/.cursor/plans/` (steps 2-3 are appended there by editing).
+**End this step** by calling **CreatePlan** with: `name` (issue title), `overview` per the argument table (not the Describe current state text), **`plan`** containing **`## 1 - Describe current state`** followed by this step's synopsis verbatim. That creates the **brainstorming** plan file under `~/.cursor/plans/` (steps 2-3 are appended there by editing).
 
-No preamble ("in this section…") inside the Examine section.
+No preamble ("in this section…") inside the Describe current state section.
 
 After step 1, proceed directly to step 2 without a confirmation stop.
 
 ---
 
-## 2 - Approach
+## 2 - Approach problem
 
 **Output of this step:** a small set of **named options** (one is fine). For each option include:
 
@@ -86,11 +86,11 @@ Do **not** here: ordered implementation phases or per-file step lists (those are
 
 Stay at strategy level, not syntax-level plans. Keep option text plain and brief. Do not include deep implementation details, long parameter discussions, or edge-case policy decisions in step 2.
 
-Append **## 2 - Approach** and this step's output to the **`plan`** field of the **brainstorming** `.plan.md` file by editing that file.
+Append **## 2 - Approach problem** and this step's output to the **`plan`** field of the **brainstorming** `.plan.md` file by editing that file.
 
 ---
 
-## 3 - Sketch prep
+## 3 - Prepare sketch
 
 **Output of this step:** introspect on the selected approach and identify what you still need to know before you can sketch a phased implementation plan.
 
@@ -113,12 +113,12 @@ Append **## 2 - Approach** and this step's output to the **`plan`** field of the
 
 - **`### Follow-up questions (N)`:** every **later** question (after the first batch exists, after the partner edits answers, after you review, or anytime before step 4) goes here, **not** back under `### Questions`. Append each new subsection at the **end** of step 3 (after all existing step-3 content, including prior follow-up blocks), using the next index: `### Follow-up questions (1)`, then `(2)`, `(3)`, and so on. Use the same bullet / nested `Answer:` pattern as above. Never merge follow-up material into `### Questions`.
 
-**Review before step 4:** when the partner says "proceed," respond immediately with "Reviewing answers...", then read every `Answer:` in the plan before advancing. If anything is still ambiguous, contradictory, uncertain, or newly open, including anything not explicitly settled in existing answers, append the next `### Follow-up questions (N)` block instead of pushing the decision into step 4 with stronger assertions. Repeat review and follow-ups until you have high-confidence clarity for the sketch. "Proceed" is not permission to skip incomplete `Answer:` lines or leave guesswork on the table.
+**Review before step 4:** when the partner says "proceed," respond immediately with "Reviewing answers...", then read every `Answer:` in the plan before advancing. If anything is still ambiguous, contradictory, uncertain, or newly open, including anything not explicitly settled in existing answers, append the next `### Follow-up questions (N)` block instead of pushing the decision into step 4 with stronger assertions. Repeat review and follow-ups until you have high-confidence clarity for the sketch solution. "Proceed" is not permission to skip incomplete `Answer:` lines or leave guesswork on the table.
 
-Example **`## 3 - Sketch prep`** section:
+Example **`## 3 - Prepare sketch`** section:
 
 ```markdown
-## 3 - Sketch prep
+## 3 - Prepare sketch
 
 ### Locked assumptions
 
@@ -140,11 +140,11 @@ Example **`## 3 - Sketch prep`** section:
   - Answer:
 ```
 
-Append **## 3 - Sketch prep** and this step's output to the **`plan`** field of the **brainstorming** `.plan.md` file by editing that file.
+Append **## 3 - Prepare sketch** and this step's output to the **`plan`** field of the **brainstorming** `.plan.md` file by editing that file.
 
 ---
 
-## 4 - Sketch
+## 4 - Sketch solution
 
 **Output of this step:** create an implementation-ready sketch using **ordered phases** for the chosen approach.
 
@@ -198,4 +198,4 @@ Example phase:
     - Cover success and failed filtering.
     - Cover invalid `status_category` in the URL.
 
-**Create the sketch plan:** call **CreatePlan** again to **create a new** `.plan.md` file (do not edit the brainstorming plan for this). Set **`name`** to the same issue headline as the brainstorming plan, suffixed with ` - Sketch`. Set **`plan`** to **`## 4 - Sketch`** followed by this step's phased output only. Set **`todos`** per the argument table: one todo per **`### Phase N - …`** line, same order, each todo **title** equal to that heading's text after `### `.
+**Create the sketch plan:** call **CreatePlan** again to **create a new** `.plan.md` file (do not edit the brainstorming plan for this). Set **`name`** to the same issue headline as the brainstorming plan, suffixed with ` - Sketch solution`. Set **`plan`** to **`## 4 - Sketch solution`** followed by this step's phased output only. Set **`todos`** per the argument table: one todo per **`### Phase N - …`** line, same order, each todo **title** equal to that heading's text after `### `.
