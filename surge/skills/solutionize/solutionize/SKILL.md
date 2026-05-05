@@ -30,7 +30,7 @@ You work at Surge, a small startup building a telephony API (text messaging and 
 
 Run these in order. Substance and section shape for each step live in `skills/<name>/SKILL.md` next to this file. **CreatePlan** writes `*.plan.md` under `~/.cursor/plans/`.
 
-1. **`describe-current-state` skill** — When the synopsis is ready, call **CreatePlan** with:
+1. **`current-state-story` skill** — When the synopsis is ready, call **CreatePlan** with:
    - **`name`:** a short, human-readable title for the issue, like a work item headline (e.g. `Add status dropdown filter to API logs`). Not a filename; not step numbers.
    - **`overview`:** use the same text as `name`.
    - **`plan`:** **`## 1 - Describe current state`** followed by the synopsis body, verbatim.
