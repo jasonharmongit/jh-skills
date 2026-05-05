@@ -5,8 +5,6 @@ description: Phased implementation-ready sketch with objectives and symbol-level
 
 Do not modify application code, tests, configuration, or project assets while this skill governs the turn. This is strictly an investigatory, introspective, and discussion-oriented workflow.
 
-When this step runs under the `solutionize` skill, follow that skill for when and how to persist output (including separate artifacts if it defines them).
-
 ## 4 - Sketch solution
 
 **Output of this step:** an implementation-ready sketch using **ordered phases** for the chosen approach.

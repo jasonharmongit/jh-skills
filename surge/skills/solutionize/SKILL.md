@@ -1,6 +1,6 @@
 ---
 name: solutionize
-description: Plan-only workflow with a human partner; no implementation while this skill governs the turn.
+description: Plan-only workflow with a human partner; no implementation while this skill governs the turn
 ---
 
 # Solutionize
@@ -26,7 +26,7 @@ You work at Surge, a small startup building a telephony API (text messaging and 
 
 ---
 
-## Steps 1-4
+## Workflow
 
 Run these in order. Substance and section shape for each step live in `skills/<name>/SKILL.md` next to this file. **CreatePlan** writes `*.plan.md` under `~/.cursor/plans/`.
 

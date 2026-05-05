@@ -1,58 +1,96 @@
 ---
 name: prepare-sketch
-description: Locked assumptions, questions, and follow-ups before a phased sketch.
+description: Locked assumptions, questions, and follow-ups before a phased sketch
 ---
 
-Do not modify application code, tests, configuration, or project assets while this skill governs the turn. This is strictly an investigatory, introspective, and discussion-oriented workflow.
+# Prepare sketch
 
-When this step runs under the `solutionize` skill, follow that skill for when and how to persist output, including where questions live and how the partner answers them.
+## Invoking this skill
 
-## 3 - Prepare sketch
+You must be in **Cursor Plan mode** for the entire duration. All output lives in a `.plan.md` file. Edit the file to include the `## 3 - Prepare sketch` section (or adjust the section number as appropriate for your context) with its body.
 
-**Output of this step:** introspect on the selected approach and identify what you still need to know before you can sketch a phased implementation outline.
+## Your goal
 
-**Hard gate:** do not continue to the sketch-solution step without the user's explicit approval; even when you have **no** questions, you still need that go-ahead. Do not draft the phased implementation sketch yet (that is the sketch-solution step).
+Introspect on an approach. Identify and lock down open questions and assumptions that will guide implementation.
 
-**Questions and answers (agent vs partner):** the agent never asks the partner questions in chat (no chat-panel prompts; no prose beside the workflow document used as Q&A; no tool that surfaces as a chat question; and **do not** use `AskQuestion` in this step regardless of other reminders). Every question, initial or follow-up, lives only in the workflow document under this step. The partner completes each `Answer:` by editing that document. The agent does not answer its own questions.
+## Document structure
 
-**Sections to include for this step:**
-
-- **`### Locked assumptions`:** very concise: one short phrase or sentence per bullet; the selected option is first. Do not revise or extend this list because questions were answered; the decision record is each question paired with its `Answer:`. Add bullets here **only** when the partner explicitly asks for something to be added (including specific lines they want recorded there).
-
-- **`### Questions`:** the **first** batch of open decisions only. For each item:
-
-  ```markdown
-  - <question>
-    - Answer:
-  ```
-
-  Replace `<question>` with the real question.
-
-- **`### Follow-up questions (N)`:** every **later** question (after the first batch exists, after the partner edits answers, after you review, or anytime before the sketch-solution step) goes here, **not** back under `### Questions`. Append each new subsection at the **end** of step 3 (after all existing step-3 content, including prior follow-up blocks), using the next index: `### Follow-up questions (1)`, then `(2)`, `(3)`, and so on. Use the same bullet / nested `Answer:` pattern as above. Never merge follow-up material into `### Questions`.
-
-**Review before sketch solution:** when the partner says "proceed," respond immediately with "Reviewing answers...", then read every `Answer:` in the workflow document before advancing. If anything is still ambiguous, contradictory, uncertain, or newly open, including anything not explicitly settled in existing answers, append the next `### Follow-up questions (N)` block instead of pushing the decision into the sketch step with stronger assertions. Repeat review and follow-ups until you have high-confidence clarity for the sketch solution. "Proceed" is not permission to skip incomplete `Answer:` lines or leave guesswork on the table.
-
-Example **`## 3 - Prepare sketch`** section:
-
-```markdown
-## 3 - Prepare sketch
+Include three sections in your workflow document:
 
 ### Locked assumptions
 
-- Option A is selected.
-- Outcome applies only to the paginated list path (drill-in by request ID is unchanged).
-- Filtering uses the existing `status` field.
+Very concise list: one short phrase or sentence per bullet.
+- Start with the primary approach or decision being explored
+- Use this only as a decision record; do not revise it based on answers to questions
 
 ### Questions
 
-- Should the drill-in view show the same filter state as the list?
+The first batch of open decisions only. For each item:
+
+```markdown
+- <your question>
+  - Answer:
+```
+
+### Follow-up questions (N)
+
+Later questions (after initial answers, or anytime during the discussion) go here, never back into `### Questions`. 
+- Append each new subsection at the **end**, using the next index: `(1)`, `(2)`, `(3)`, etc.
+- Use the same question/Answer: pattern
+
+## Anti-patterns to avoid
+
+- Do not draft the implementation sketch yet. Lock down the decisions first
+- Do not proceed without explicit user approval, even if you have no questions
+- Do not ask questions in chat, use `AskQuestion`, or use tools that surface as chat prompts. All questions and answers belong only in the workflow document
+- Do not answer your own questions. The user completes each `Answer:` line by editing the document
+- Do not add bullets to Locked assumptions unless the user explicitly requests it
+- Do not revise Locked assumptions based on answers to questions; the pairing of question + answer is the decision record
+- Do not merge follow-up questions back into the Questions section; always append them in chronological order as new Follow-up questions (N) blocks
+- Do not guess or push uncertain decisions forward. If an answer is ambiguous, contradictory, or incomplete, add a follow-up question instead
+- Do not skip or gloss over incomplete `Answer:` lines during your review before proceeding
+
+---
+
+## Workflow
+
+1. **Write locked assumptions** — Extract assumptions from the approach being explored, your research, investigation, and chat history with the user. List them concisely in the `### Locked assumptions` section. Start with the primary approach, then add key constraints, scope boundaries, and decisions already made.
+
+2. **Introspect and investigate** — Before writing questions, think deeply about what still needs to be decided. Re-read the approach context, any current-state information, and relevant code or documentation. Identify gaps: which decisions would directly affect implementation scope, file count, PR size, or architecture? Which decisions would change how work flows through the system?
+
+3. **Write initial questions** — Create the `### Questions` section with the first batch of open decisions. Each question should be answerable and material to moving forward. Focus on decisions that unlock clarity; avoid edge cases or micro-decisions that can wait.
+
+4. **Enter discussion mode** — Tell the user the questions are ready and wait for their input. The user may answer questions, ask their own clarifying questions, discuss tradeoffs, or request changes to assumptions. All discussion and answers live in the `.plan.md` file; do not ask or answer in chat.
+
+5. **Review answers and introspect** — When all `Answer:` lines are filled in, re-read them carefully. Check for ambiguity, contradiction, or incompleteness. Introspect on what the answers reveal: do they unlock new questions? Do they expose gaps in your understanding? Do they settle any assumptions you listed, or change them?
+
+6. **Generate follow-up questions** — If answers are complete and clear, you may have no follow-ups. If you do have new questions, create a new `### Follow-up questions (N)` block (use the next index) and add them in the same format. Repeat step 4 and 5 until all necessary decisions are locked and you have high confidence in the path forward.
+
+7. **Ready for approval** — When you are satisfied that all necessary decisions are made and settled, respond in chat: "Prepare sketch is complete; ready for approval to proceed." Wait for the user's explicit proceed confirmation.
+
+---
+
+## Example
+
+```markdown
+## Prepare sketch
+
+### Locked assumptions
+
+- Approach focuses on pagination optimization
+- Changes apply only to the list view (drill-in view unchanged)
+- Uses the existing `status` field for filtering
+
+### Questions
+
+- Should filtering state persist when navigating between list and drill-in?
   - Answer:
 
-- Should filtering apply to exports if we add CSV later?
+- Should filtering be available for export if added later?
   - Answer:
 
 ### Follow-up questions (1)
 
-- Should failed SMS rows include retries in the filtered count?
+- Should retry attempts be included in failed row counts?
   - Answer:
 ```
