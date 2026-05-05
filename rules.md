@@ -53,3 +53,4 @@ purchaser_info_params = params["purchaser_info"] || %{}
 - NEVER use an `as:` in a module alias or in a form
 - keep code on a single line whenever possible. only split if it will go over the 120 character line limit.
 - avoid 'belt and suspenders' code, where something is done redundantly or unnecessarily
+- in conditional branches like if/elses, always write the success path first
