@@ -54,3 +54,4 @@ purchaser_info_params = params["purchaser_info"] || %{}
 - keep code on a single line whenever possible. only split if it will go over the 120 character line limit.
 - avoid 'belt and suspenders' code, where something is done redundantly or unnecessarily
 - in conditional branches like if/elses, always write the success path first
+- always include `@spec`s for private functions
