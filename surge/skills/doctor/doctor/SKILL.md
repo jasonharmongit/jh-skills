@@ -29,7 +29,7 @@ Example report line:
 
 ## Step 1 - Organize functions
 
-Read and apply the **organize-elixir-functions** skill from `~/.agents/skills/organize-elixir-functions`. Unless the user specifies otherwise (rare), you should apply it in `branch mode`.
+Read and apply the **organize-changes** skill from `~/.agents/skills/organize-changes`. Unless the user specifies otherwise (rare), you should apply it in `branch mode`.
 
 When determining which files changed on the branch for that step, use the same baseline as Step 4: **`git merge-base HEAD origin/main`** (not local `main`), so candidate detection matches the remote default branch.
 
