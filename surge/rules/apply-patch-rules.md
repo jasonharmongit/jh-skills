@@ -58,3 +58,4 @@ purchaser_info_params = params["purchaser_info"] || %{}
 - prefer `!` over `not`
 - prefer `||` over `or`
 - prefer `is_nil()` over `== nil` (or `!is_nil` over `!= nil`)
+- prefer `in` over multiple `or` checks on the same variable. for example, prefer `my_var in [nil, ""]` over `my_var == nil or my_var == ""`
