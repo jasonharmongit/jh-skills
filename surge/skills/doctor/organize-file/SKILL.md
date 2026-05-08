@@ -1,6 +1,6 @@
 ---
 name: organize-file
-description: Order every Elixir `def`/`defp` (and tests) in a file by lifecycle and naming rules.
+description: Organize functions, tests, and defdelegates.
 ---
 
 Use when reorganizing **the whole file** (all definitions in that module or test). To reorder **only** definitions touched on the current branch, use **`surge/skills/doctor/organize-changes/SKILL.md`** instead.
@@ -30,7 +30,7 @@ Use when reorganizing **the whole file** (all definitions in that module or test
   - Order `handle_event/3` clauses alphabetically by event name.
 
 - **Other modules**
-  - Follow **General rules**: public functions (`def`) first, alphabetically by function name; private functions (`defp`) last.
+  - Follow **General rules**: public functions (`def`) first, alphabetically by function name; private functions (`defp`) last. If there are delegates (`defdelegate`), order them intermixed with the public functions (`def`)
 
 - **Test modules**
   - Apply ordering within each `describe` block (mirror that order when nesting `describe`).
