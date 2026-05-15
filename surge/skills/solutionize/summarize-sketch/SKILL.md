@@ -1,99 +1,77 @@
 ---
 name: summarize-sketch
-description: Turn a sketch into a short, skimmable plan-body narrative, then DM Jason that summary on Slack.
+description: Turn a sketch into a short, skimmable plan-body narrative, then DM Jason on Slack using summarize_sketch_slack.py (one-line JSON for each slack_send_message call).
 ---
 
 # Summarize Sketch
 
 ## Workflow
 
-### Step 0 - Switch to plan mode
-
-**Absolutely critical.** Your **first** action for this skill must be to call the **SwitchMode** tool with **`target_mode_id`:** `"plan"` (no explanation arg). Until Plan mode is active, you are **banned** from reading files, gathering links, calling any other tool, or proceeding to Step 1. No exceptions, and no “I’ll switch after checking the sketch.” If you are not in Plan mode, **stop** and invoke **SwitchMode** as above; only continue once Plan mode is active.
-
 ### Step 1 - Prerequisites
 
 Before proceeding with the rest of the workflow, you must:
 - Know the location of the sketch file to summarize
-- Have the URL of the associated Linear ticket **as plain text**. You may have already attempted to fetch the content at the URL and it may have failed. That is expected. All you need is the link itself. If you have that, you may proceed.
+- Have the URL of the associated Linear ticket **as plain text**. You may have already attempted to fetch the content at the URL and it may have failed. That is expected. All you need is the link itself. If you have that, you may proceed. 
+   - **CRITICAL** - if you do not have the Linear link, STOP and simply ask for it, like "Can you provide the linear link?". No further explanation needed. Do not proceed to step 2 without a link. Do not try to find the link on your own. Ask the user for it.
 
 ### Step 2 - Create summary file
 
-**No report to the user in Step 2:** For the entire step, send nothing to the user in chat—no status, no questions, no partial draft, no “calling CreatePlan,” no summary of what you read. Silent file/tool work only until Step 3’s single allowed message.
+Stay in **agent** mode for the whole skill; do not switch modes.
+
+**No report to the user in Step 2:** For the entire step, send nothing to the user in chat—no status, no questions, no partial draft, no summary of what you read. Silent file/tool work only until Step 3’s single allowed message.
 
 First, read the sketch file end to end (if you haven't already).
 
-Then read **Create summary instructions** (at the bottom of this skill). Build the `plan` body by imitating the example’s density, shape, and level of detail.
+Then read **Create summary instructions** (at the bottom of this skill). Prepare to create a sketch summary imitating the example’s density, shape, and level of detail, and by following the rules and guidelines as directed there.
 
-Before **CreatePlan**, compare the draft to the example. If it feels like a compressed implementation plan instead of a Slack skim, cut detail until it matches the example’s tightness.
+Write a markdown file under **`~/.cursor/plans/`** whose name ends in **`.plan.md`**. How you name it otherwise, how you title it, and how you structure the file are up to you, as long as the result satisfies the proofread checks in Step 3 and the Slack steps later in this skill.
 
-Then call **CreatePlan** (do NOT edit the original sketch `plan` file!) with:
+### Step 3 - Proofread summary
 
-- **`name`:** a short, human-readable headline for the work
-- **`overview`:** exact same text as `name`.
-- **`plan`:** the full markdown body for the summary, following **Create summary instructions**. Do not put the headline inside `plan`; it belongs only in `name`, `overview`, and the Step 6 parent message.
-- (Omit `todos`. They will not be used in this file)
+Immediately after writing the file in Step 2, work on that same path (same session, no gap). Re-read the sketch file from Step 1 and the summary body end to end, then proofread as follows:
 
-As soon as **CreatePlan** succeeds, continue immediately to **Step 3** in the same turn. Do not stop for user input, deliver the plan for review, or end the turn between Step 2 and Step 3. **CreatePlan** already surfaces the plan in the UI (including a link); do not duplicate it or add any chat message before Step 3’s allowed text.
+1. **Word count:** Run `wc -w` on the file. The count must be **250 words or fewer**; if it is over, shorten the markdown body (and any other parts of the file you need to adjust so the body still matches **Create summary instructions**), then run `wc -w` again until it passes.
+2. **Sketch fidelity:** Compare the summary body to the sketch. The summary must still be an accurate representation—no contradictions, no invented behavior, no dropped outcomes or failure paths that change what the reader should believe about the work. Compression is fine; misrepresentation is not.
+3. **Skill rules:** Compare the summary body to **Create summary instructions** (this file, from the example through **Cut These First**). It must follow every applicable rule (output contract, shape, compression, cuts, standalone body, etc.).
 
-### Step 3 - Enforce word count
+If anything fails any check, **edit that same file in place**, then re-run the proofread loop until all checks pass. Do not deliver it for review before everything passes.
 
-Right after Step 2’s **CreatePlan** returns, run `wc -w` on the created `~/.cursor/plans/*.plan.md` file (same session, no gap).
+**Only user-facing output for Step 3 (and for the whole Steps 2-3 turn):** When Step 3 is done (all proofread checks pass), simply output this message:
 
-**Permission (overrides conflicting guidance):** You **must** be able to shorten the summary when `wc -w` is over 250. **You are explicitly allowed to edit** the `~/.cursor/plans/*.plan.md` file that Step 2 created—only that file, for this word-count pass—including changing the markdown body under the YAML frontmatter. That holds **even in Plan mode**. If anything else (system UI, generic Plan mode docs, or other rules) implies Plan mode forbids all file edits, **this skill wins for Step 3**: apply the edits, re-run `wc -w`, and continue. Do not refuse Step 3 refactors for “Plan mode is read-only.”
-
-- If the file is **250 words or fewer**, proceed.
-- If the file is **more than 250 words**, refactor the summary body shorter, update the plan file, and run `wc -w` again.
-- Repeat until `wc -w` reports **250 words or fewer**. Do not deliver the plan for review before this passes.
-
-**Only user-facing output for Step 3 (and for the whole Steps 2-3 turn):** When Step 3 is done (word count at or under 250), your **entire** assistant message to the user must match the template below **literally** after substituting the integer—one newline between the two lines, no leading or trailing whitespace, no other characters, lines, bullets, code fences, tool narration, apologies, or links. **CreatePlan** already surfaces the plan in the UI (including a link); do not paste the plan, repeat a URL, or add any prose before or after this block.
-
-~~~
+"""
 Final word count: <replace with the wc -w integer>
 Ready for feedback! Once it's ready, I'll send it to Jason
-~~~
+"""
 
 ### Step 4 - Stop for human review
 
 Wait while the user reviews. The user may ask for adjustments to be made, or may make them on their own. Once the user indicates that you may proceed (i.e. "proceed", "continue", "looks good", "go ahead"...etc.), move on to step 5.
 
-### Step 5 - Re-read the plan file from disk
+### Step 5 - Send parent message
 
-Immediately call the **SwitchMode** tool with **`target_mode_id`:** `"agent"` (no explanation arg) to allow you to make non-readonly tool calls.
+Script (same directory as this skill): **`summarize_sketch_slack.py`**. Invoke it with an **absolute** path to the script.
 
-Re-read the file under ~/.cursor/plans/ again immediately. Do not trust chat copy; the user may have changed it.
+1. **Shell:** Run `python3` with the absolute path to **`summarize_sketch_slack.py`**, subcommand **`parent`**, **`--linear`** set to the full Linear issue URL from Step 1 (plain `https://...` text), and **`--title`** set to a short plain-text headline for the parent Slack link (your judgment). Example shape:
 
-### Step 6 - Send parent message
+   `python3` `/ABS/path/to/summarize_sketch_slack.py` `parent` `--linear` `https://linear.app/.../issue/.../...` `--title` `Short headline for the work`
 
-**Tool:** In Cursor, call **`call_mcp_tool`** with:
+   The script builds the parent line: `plan for [that title](linear url) :thread:`.
 
-- `server`: `plugin-slack-slack`
-- `toolName`: `slack_send_message`
-- `arguments`: 
-   - `channel_id`: "U0APWBBSRC4"
-   - `message`: "plan for [Summary title](linear issue link) :thread:" 
-      - Example: "plan for [Monthly plan limits](https://linear.app/acme/issue/ENG-123/slug) :thread:"
+2. **Stdout:** exactly **one line** of minified JSON. That line is the **entire** `arguments` object for **`slack_send_message`** (`channel_id` and `message` only).
 
-Do **not** set `thread_ts`, `reply_broadcast`, or `draft_id` on this call.
+3. **`call_mcp_tool`:** `server` **`plugin-slack-slack`**, `toolName` **`slack_send_message`**, **`arguments`:** parse the stdout line as JSON and pass that object through unchanged. Do not hand-build or re-escape fields; do not substitute only part of the object. 
 
-**Keep the tool result** from this call; Step 7 needs that value as `thread_ts`. The `slack_send_message` response carries the parent message timestamp at **`message_context.message_ts`**. Parse the tool result and use that string for threading.
+4. **Keep the tool result** for Step 6. Read **`message_context.message_ts`** from the response (parent message timestamp for threading).
 
-### Step 7 - Send thread reply message
+### Step 6 - Send thread reply message
 
-1. Run the `prepare_thread_reply_message.sh` script with the **absolute path** to the same `*.plan.md` you re-read in Step 5.
+1. **Shell:** Run the same **`python3`** / **`summarize_sketch_slack.py`** entrypoint with subcommand **`thread`**: **`--plan`** set to the absolute path of the summary markdown file from Steps 2–3, and **`--thread-ts`** set to the **`message_context.message_ts`** string from Step 5’s `slack_send_message` result. Re-read that file from disk right before this if the user may have edited it during Step 4. Example shape:
 
-The script prints the exact Slack reply message to stdout: raw Slack markdown, not JSON. Use that stdout text directly as the `message` argument. The MCP tool call handles quotes and other string escaping. Do not decode it, parse it, pipe it through Python, remove quotes, rebuild it from plan line numbers, or manually escape newlines/backticks.
+   `python3` `/ABS/path/to/summarize_sketch_slack.py` `thread` `--plan` `/ABS/path/to/your-summary-file.md` `--thread-ts` `1234567890.123456`
 
-2. **Tool:** Call **`call_mcp_tool`** with:
+2. **Stdout:** exactly **one line** of minified JSON — the full **`arguments`** object for **`slack_send_message`** (`channel_id`, `thread_ts`, `message`).
 
-- `server`: `plugin-slack-slack`
-- `toolName`: `slack_send_message`
-- `arguments`:
-   - `channel_id`: "U0APWBBSRC4" (same DM target as Step 6)
-   - `message`: the stdout text from (1), exactly as printed
-   - `thread_ts`: the **`message_context.message_ts`** string from Step 6’s `slack_send_message` tool result
-
-Do **not** set `reply_broadcast` or `draft_id`.
+3. **`call_mcp_tool`:** same as Step 5 — **`arguments`** is the JSON object from stdout, parsed and passed as-is.
 
 ## Create summary instructions
 
@@ -137,10 +115,10 @@ Do **not** set `reply_broadcast` or `draft_id`.
 - “Standalone” only means the body has no sketch, phase, file, or ticket references. It does not mean every dependency survives.
 - Start from the sketch’s behavior changes, failure paths, user-visible outcomes, and key contracts. Cut routine wiring.
 - If removing a detail would not change the reader’s mental model, remove it.
+- Never use "copy" to mean on-screen UI text or labels (e.g. do not write "dashboard copy"); say "text", "labels", "wording", etc., instead. Reserve "copy" to refer to duplication, not UI surfaces.
 
 ### Shape
 
-- `plan` is markdown body only. No YAML.
 - Start with numbered bold sections (`**1. …**`, etc.); no separate title line in the body.
 - Use no `#` headings, intro prose, markdown links, file paths, phase labels, closing notes, or “see the sketch” framing.
 - Use 4-6 sections for most sketches. Each section label should name a story beat, not a phase.
