@@ -1,45 +1,69 @@
 ---
 name: summarize-sketch
-description: Turn a sketch into a short, skimmable plan-body narrative (CreatePlan), then DM Jason that summary on Slack.
+description: Turn a sketch into a short, skimmable plan-body narrative, then DM Jason that summary on Slack.
 ---
 
 # Summarize Sketch
 
 ## Workflow
 
-### Step 0 - Prerequisites
+### Step 0 - Switch to plan mode
+
+**Absolutely critical.** Your **first** action for this skill must be to call the **SwitchMode** tool with **`target_mode_id`:** `"plan"` (no explanation arg). Until Plan mode is active, you are **banned** from reading files, gathering links, calling any other tool, or proceeding to Step 1. No exceptions, and no “I’ll switch after checking the sketch.” If you are not in Plan mode, **stop** and invoke **SwitchMode** as above; only continue once Plan mode is active.
+
+### Step 1 - Prerequisites
 
 Before proceeding with the rest of the workflow, you must:
 - Know the location of the sketch file to summarize
 - Have the URL of the associated Linear ticket **as plain text**. You may have already attempted to fetch the content at the URL and it may have failed. That is expected. All you need is the link itself. If you have that, you may proceed.
-- **Cursor mode:** Use **Plan** mode for **Steps 1-2** (read the sketch, then read **Create summary instructions** below—the appendix includes **example** plus all shaping rules—then call **CreatePlan**, deliver the plan for human review). If you are not in Plan mode when you start Step 1, switch to Plan mode first. Plan mode is read-only and cannot run Slack MCP tools. After review, when you are ready to post to Slack, switch to **Agent** mode before **Step 3** and remain in Agent mode through **Step 5** (re-read the plan file from disk, then **call_mcp_tool** for the parent message and thread reply).
 
-### Step 1 - Create summary file
+### Step 2 - Create summary file
+
+**No report to the user in Step 2:** For the entire step, send nothing to the user in chat—no status, no questions, no partial draft, no “calling CreatePlan,” no summary of what you read. Silent file/tool work only until Step 3’s single allowed message.
 
 First, read the sketch file end to end (if you haven't already).
 
-Then read **Create summary instructions** (at the bottom of this skill). Build the `plan` body to follow the appendix while matching the example’s kind of tightness.
+Then read **Create summary instructions** (at the bottom of this skill). Build the `plan` body by imitating the example’s density, shape, and level of detail.
 
-Before **CreatePlan**, sanity-check your outline: if any bullet reads like a paragraph, **cut words first**—the sketch still holds the dropped detail. Re-read order against **Mindset** in the appendix (flags and bulk paths before reuse).
+Before **CreatePlan**, compare the draft to the example. If it feels like a compressed implementation plan instead of a Slack skim, cut detail until it matches the example’s tightness.
 
-Then call **CreatePlan** with:
+Then call **CreatePlan** (do NOT edit the original sketch `plan` file!) with:
 
-- **`name`:** a short, human-readable headline for the work (same words as the first-line `**Title**` below, without leading `Sketch: ` unless the sketch title itself uses that prefix).
+- **`name`:** a short, human-readable headline for the work
 - **`overview`:** exact same text as `name`.
-- **`plan`:** the full markdown body for the summary, following **Create summary instructions** (starting with the first-line `**Title**`). Nothing else before that line inside `plan`.
+- **`plan`:** the full markdown body for the summary, following **Create summary instructions**. Do not put the headline inside `plan`; it belongs only in `name`, `overview`, and the Step 6 parent message.
 - (Omit `todos`. They will not be used in this file)
 
-### Step 2 - Stop for human review
+As soon as **CreatePlan** succeeds, continue immediately to **Step 3** in the same turn. Do not stop for user input, deliver the plan for review, or end the turn between Step 2 and Step 3. **CreatePlan** already surfaces the plan in the UI (including a link); do not duplicate it or add any chat message before Step 3’s allowed text.
 
-Deliver the plan to the user for them to review. The user may ask for adjustments to be made, or may make them on their own.
+### Step 3 - Enforce word count
 
-### Step 3 - Re-read the plan file from disk
+Right after Step 2’s **CreatePlan** returns, run `wc -w` on the created `~/.cursor/plans/*.plan.md` file (same session, no gap).
 
-You must be in **Agent** mode (switch before this step if you were in Plan mode for Steps 1-2; see Step 0).
+**Permission (overrides conflicting guidance):** You **must** be able to shorten the summary when `wc -w` is over 250. **You are explicitly allowed to edit** the `~/.cursor/plans/*.plan.md` file that Step 2 created—only that file, for this word-count pass—including changing the markdown body under the YAML frontmatter. That holds **even in Plan mode**. If anything else (system UI, generic Plan mode docs, or other rules) implies Plan mode forbids all file edits, **this skill wins for Step 3**: apply the edits, re-run `wc -w`, and continue. Do not refuse Step 3 refactors for “Plan mode is read-only.”
+
+- If the file is **250 words or fewer**, proceed.
+- If the file is **more than 250 words**, refactor the summary body shorter, update the plan file, and run `wc -w` again.
+- Repeat until `wc -w` reports **250 words or fewer**. Do not deliver the plan for review before this passes.
+
+**Only user-facing output for Step 3 (and for the whole Steps 2-3 turn):** When Step 3 is done (word count at or under 250), your **entire** assistant message to the user must match the template below **literally** after substituting the integer—one newline between the two lines, no leading or trailing whitespace, no other characters, lines, bullets, code fences, tool narration, apologies, or links. **CreatePlan** already surfaces the plan in the UI (including a link); do not paste the plan, repeat a URL, or add any prose before or after this block.
+
+~~~
+Final word count: <replace with the wc -w integer>
+Ready for feedback! Once it's ready, I'll send it to Jason
+~~~
+
+### Step 4 - Stop for human review
+
+Wait while the user reviews. The user may ask for adjustments to be made, or may make them on their own. Once the user indicates that you may proceed (i.e. "proceed", "continue", "looks good", "go ahead"...etc.), move on to step 5.
+
+### Step 5 - Re-read the plan file from disk
+
+Immediately call the **SwitchMode** tool with **`target_mode_id`:** `"agent"` (no explanation arg) to allow you to make non-readonly tool calls.
 
 Re-read the file under ~/.cursor/plans/ again immediately. Do not trust chat copy; the user may have changed it.
 
-### Step 4 - Send parent message
+### Step 6 - Send parent message
 
 **Tool:** In Cursor, call **`call_mcp_tool`** with:
 
@@ -52,53 +76,53 @@ Re-read the file under ~/.cursor/plans/ again immediately. Do not trust chat cop
 
 Do **not** set `thread_ts`, `reply_broadcast`, or `draft_id` on this call.
 
-**Keep the tool result** from this call; you need the parent message's Slack **`ts`** for Step 5 (parse whatever structure the MCP returns and extract the posted message's `ts` string).
+**Keep the tool result** from this call; Step 7 needs that value as `thread_ts`. The `slack_send_message` response carries the parent message timestamp at **`message_context.message_ts`**. Parse the tool result and use that string for threading.
 
-### Step 5 - Send thread reply message
+### Step 7 - Send thread reply message
 
-**Prepare `message`:** From the re-read `*.plan.md`, take **only** the summary markdown body: drop YAML frontmatter, then from the first `**Title**` line through EOF. Pass that slice **verbatim** into `message` (same newlines and markdown as the plan). `slack_send_message` renders standard Markdown for Slack—**do not** hand-translate to mrkdwn or tweak emphasis yourself. Strip any YAML that leaked into the body; nothing else should differ from the plan file.
+1. Run the `prepare_thread_reply_message.sh` script with the **absolute path** to the same `*.plan.md` you re-read in Step 5.
 
-**Tool:** Call **`call_mcp_tool`** again with:
+The script prints the exact Slack reply message to stdout: raw Slack markdown, not JSON. Use that stdout text directly as the `message` argument. The MCP tool call handles quotes and other string escaping. Do not decode it, parse it, pipe it through Python, remove quotes, rebuild it from plan line numbers, or manually escape newlines/backticks.
+
+2. **Tool:** Call **`call_mcp_tool`** with:
 
 - `server`: `plugin-slack-slack`
 - `toolName`: `slack_send_message`
-- `arguments`: 
-   - `channel_id`: "U0APWBBSRC4" (same DM target as Step 4)
-   - `message`: the full summary body from above
-   - `thread_ts`: the parent message **`ts`** from Step 4's `slack_send_message` tool result
+- `arguments`:
+   - `channel_id`: "U0APWBBSRC4" (same DM target as Step 6)
+   - `message`: the stdout text from (1), exactly as printed
+   - `thread_ts`: the **`message_context.message_ts`** string from Step 6’s `slack_send_message` tool result
 
 Do **not** set `reply_broadcast` or `draft_id`.
 
 ## Create summary instructions
 
-**Appendix for Step 1.** After the sketch, read this appendix **top to bottom**. Start with **example** for the concrete pattern; then use **Mindset** through **Voice** for intent, heuristics, and all shaping and styling rules for the `plan` body you pass to **CreatePlan**.
+**Appendix for Step 2.** The example is the primary instruction. Match its compression level, section rhythm, and plain-language feel. The rules below exist only to help you produce that kind of artifact.
 
-### Exemple
-
-**Monthly plan limits**
+### Example
 
 **1. Monthly limits**
 
 - Each platform caps outbound messages and verifications by billing plan:
-  - Messages: hobby 500, starter 2,500, growth 15,000 / month when capped; no cap for custom plan or missing billing
+  - Messages: hobby 500, starter 2,500, growth 15,000 / month; no cap for custom or missing billing
   - Verifications: hobby 100, starter 350, growth 2,000 / month; same no-cap rule
-- Add `platforms.limit_monthly_messages` to allow for platform-specific override
+- Add `platforms.limit_monthly_messages` for platform override
 
 **2. Redis counters** (`RateLimiter`)
 
-- New `monthly_message_debit/2` and `monthly_verification_debit/2`: debit N from Redis per platform and month
+- New `monthly_message_debit/2` and `monthly_verification_debit/2`: debit N from Redis per platform/month
 
 **3. Blasts and campaigns**
 
-- Blast: debit the whole batch from Redis in one DB transaction right before `Oban.insert_all`; if Redis blocks, roll it all back; if OK, queue each child `SendMessage` with `skip_monthly_message_quota_debit: true` (so workers do not debit again).
-- Campaign: debit the full planned send count from Redis once before chunking; roll back the whole campaign if Redis blocks.
-- When the campaign already debited: inner `execute_blast` skips its own Redis debit for that same work; still queue `SendMessage` jobs with `skip_monthly_message_quota_debit: true`.
+- Blast: debit the whole batch in one DB transaction right before `Oban.insert_all`; block rolls back, allow queues child `SendMessage` jobs prepaid.
+- Campaign: debit the full planned count once before chunking; roll back the campaign if Redis blocks.
+- When campaign already debited: `execute_blast` skips its Redis debit, but still queues prepaid `SendMessage` jobs.
 
 **4. Single message sends** (`SendMessage`)
 
-- Debit 1 from the message Redis counter before the SMS API (when caps apply).
-  - Skip debit when plan has no cap, platform turned caps off, or job is prepaid from blast/campaign (`skip_monthly_message_quota_debit: true`).
-- If Redis blocks: mark failed, Slack `:data_issues`, return `{:cancel, ...}` so Oban will not retry.
+- Debit 1 from the message Redis counter before the SMS API.
+  - Skip when uncapped, platform disabled caps, or job is prepaid (`skip_monthly_message_quota_debit: true`).
+- If Redis blocks: mark failed, Slack `:data_issues`, return `{:cancel, ...}` with no retry.
 
 **5. Verifications** (`SendCode`)
 
@@ -106,62 +130,40 @@ Do **not** set `reply_broadcast` or `draft_id`.
 - If Redis blocks: mark failed, Slack `:data_issues`, cancel with no provider call.
 - If Redis OK: update the same row with the provider result (no second row).
 
-### Mindset
+### Output Contract
 
-- Produce the same kind of answer as a **concise breakdown** request: **only the main points** someone must **understand** about the sketch (what the system will do differently, where it applies, what success and failure look like)—not a shorter re-listing of every sketch bullet.
-- Optimize for **orientation**: enough to decide whether to open the sketch for phase-level detail; **not** enough to implement from the summary alone.
-- The delivered `plan` markdown is a **skim artifact**: a quick mental model of the approach, not a checklist of everything the sketch mentions.
-- Build a **short narrative**: one mental picture of the approach someone can skim **top to bottom** and leave oriented, not a compressed spec of every sketch bullet.
-- Order sections so each pass **adds or sharpens** the picture (overall shape first, then the few details that really change how you think about the work); drop anything that only restates what the reader already inferred.
-- Keep the read **natural**: introduce an idea, flag, or shorthand **before** later bullets rely on it; later sections **reinforce** earlier ones instead of assuming context the reader has not seen yet.
-- When a later step reuses a job arg, flag, or pattern from an earlier path (for example prepaid bulk work before single-message workers), **order sections** so the bulk path comes first and the name is defined before reuse.
+- Produce a Slack skim, not a shorter implementation plan.
+- Give enough orientation to understand the approach; do not include enough detail to implement from the summary alone.
+- “Standalone” only means the body has no sketch, phase, file, or ticket references. It does not mean every dependency survives.
+- Start from the sketch’s behavior changes, failure paths, user-visible outcomes, and key contracts. Cut routine wiring.
+- If removing a detail would not change the reader’s mental model, remove it.
 
-### Guidelines (heuristics, not rules)
+### Shape
 
-- Details that **often** strengthen the mental picture: persistent shape changes (new columns, tables, enums), new entry points (functions, workers, modules), new pages or routes, and behavior shifts someone would notice (limits, failures, permissions, customer-visible outcomes).
-- Details that **often** distract unless the sketch is mainly about them: wiring like which associations get preloaded for a task, boilerplate or ceremony that does not change the story.
-- **You decide** what belongs in *this* summary: weigh each sketch area against the narrative you are building; bend or skip these heuristics whenever that serves the clearest top-to-bottom picture of the approach.
+- `plan` is markdown body only. No YAML.
+- Start with numbered bold sections (`**1. …**`, etc.); no separate title line in the body.
+- Use no `#` headings, intro prose, markdown links, file paths, phase labels, closing notes, or “see the sketch” framing.
+- Use 4-6 sections for most sketches. Each section label should name a story beat, not a phase.
+- Optional heading parenthetical may name one backticked module or worker. Never list multiple anchors.
+- Use 8-12 total bullets for most sketches. Prefer 1-3 bullets per section.
+- Use one nested bullet level only when it compresses a small set of essential values.
 
-### Canonical shape (must match **Exemple**)
+### Compression Rules
 
-- **No YAML** inside `plan`; **CreatePlan** supplies frontmatter. Your `plan` argument is only the markdown body.
-- **No `#` headings.** Titles and section labels use `**bold**` only.
-- **First line:** one `**Title**` line (issue headline style, not "summary of…").
-- **Blank line**, then the numbered **sections** (the example does not use a horizontal rule). **No** prose between the title and `**1. …**`. Do **not** insert a `**Main ideas**` line (or any other label) between the title and the sections.
-- **Sections:** `**1. Short label**`, `**2. Short label**`, … where each label names a **story beat** (plain words; not a phase title pasted from the sketch). You may add **at most one** optional parenthetical immediately after the closing `**`, containing **a single** backticked module or worker name—same style as **Single message sends** / `SendMessage` in the example. **Do not** put several module names in one heading parenthesis; pick the one anchor a reader needs. Expect roughly **4–7** numbered sections for a typical sketch (the example uses **5**); merge or split so the section count matches how many beats the narrative needs.
-- Under each section: top-level `-` bullets—prefer **2–3**; **4** top-level bullets in one section is acceptable when several distinct beats belong together (see example **Blasts and campaigns**). Each top-level bullet carries **one** main idea. You may add **one short level** of nested `-` sub-bullets under a parent bullet for brief numbers or other key detail **only** when it belongs with that point (nested limits under example **1. Monthly limits**; an optional nested skip-debit line under example **4. Single message sends**). Keep sub-bullets to a handful of words each; do not nest deeper than one level.
-- Use `` `backticks` `` for modules, functions, atoms, flags, JSON keys, Redis key patterns, and other code-ish tokens. **Do not** use markdown links, **do not** paste repo paths like `lib/...`, and **do not** enumerate files the way the sketch does unless a single backticked module name is the clearest way to name a touchpoint.
-- **Standalone `plan` body:** Do **not** reference the source sketch, phased write-up, Linear ticket, or “see elsewhere” framing; nothing in the markdown should assume the reader will open another doc.
+- Match the example’s telegraph style. Short beats beat complete sentences.
+- Top-level bullets: target 18-24 words; hard cap 28.
+- Nested bullets: target a phrase, not a sentence.
+- Prefer domain verbs like `debit`, `rollback`, `queue`, `cancel`, `block`, `allow`.
+- Use backticks for real code identifiers, atoms, flags, keys, modules, and workers.
+- Mention exact numbers or strings only when they are product behavior someone must remember.
+- Do not mention automated tests unless the sketch is mainly testing work.
 
-### Length budget (non-negotiable)
+### Cut These First
 
-Match the example’s **telegraph style**, not a compressed sketch. Other sketches should **feel** the same (short beats, plain words, natural order) even when the section topics differ.
-
-- **Each bullet (top-level or nested):** **≤ 28 words**; aim **≤ 22**. At most **one semicolon** per bullet—if you reach for a second clause, make a second bullet or delete the lower-value clause.
-- **Wording:** Prefer short domain verbs (`debit`, `rollback`, `queue`, `cancel`) over wiring narration (`perform/1`, long `with` chains) unless a backticked symbol is the clearest single token for that idea.
-- **Omit from this summary** unless the example would include an analogue: tuning knobs or algorithm constants, dev-only or parity-only mechanics, stakeholder or process asides, and fine-grained sequencing that only restates an invariant you already captured in one short bullet.
-- **Automated tests:** Do **not** mention routine tests, test files, assertions, suites, or regression plans in any heading or bullet. The **only** exception is when the sketch’s **central** outcome is testing work.
-
-### Language and scan
-
-- **Plain and short:** write for someone glancing down the page; favor tight phrases over long sentences when the meaning stays clear.
-- **Repo vocabulary:** follow the product’s words (for Surge work, prefer **messages** and **verifications** over casual “texts” and “codes” unless the sketch is explicitly about something else).
-- **No mystery abbreviations:** spell words out (**transaction**, not **txn**). Use `` `backticks` `` for real code identifiers (modules, functions, atoms, flags, keys). Do not invent cryptic shorthand just to save space.
-- **UI wording:** never use **copy** to mean on-screen text; say **strings**, **wording**, **labels**, or **response** phrasing.
-
-### Anti-patterns
-
-- Rewriting the sketch **phase-by-phase** with long section titles copied from `### Phase N`.
-- Bullets that are mostly **file paths** or `[label](path)` links to source.
-- Extra prose between the title and the first numbered section (mini-spec lead-in instead of jumping straight into sections).
-- Meta pointers in the summary body ("see the sketch", "phase N", "details in the plan", ticket links).
-- A closing line such as `Tracks [TICKET](https://linear.app/...)` in the summary body. The Linear link belongs **only** in Step 4’s Slack parent message, not here.
-- Mentioning **automated tests** (files, suites, regression strategy) when the sketch is **not** centrally about testing work.
-- **Mega-bullets:** one `-` line that chains many clauses, names multiple helpers, or narrates control flow the way the sketch does (for example `perform/1` plus `with` chain propagation in the same bullet).
-- **Heading sprawl:** parentheticals listing several modules, or section titles that read like phase titles from the sketch.
-- **Extra machinery** called out as its own bullet when the example would stay silent (for example development stub parity for a limiter) unless skipping it would mislead a reader about scope.
-- **Abbreviation for brevity alone** (for example **txn** for transaction) when the full word still scans well.
-
-### Voice
-
-Stack **decisions and contracts** into one coherent image (see **Mindset** in this appendix). The `plan` body should read **standalone** and complete for orientation; the sketch file remains optional drill-down. If a line does not help answer “what are the main things I need to understand?”, cut it.
+- Phase-by-phase retellings.
+- File lists and repo paths.
+- Preloads, associations, helper threading, callback parity, and other plumbing.
+- Constants, tuning details, and algorithm mechanics unless they define user-visible behavior.
+- Enum/schema/helper additions that only support a behavior already summarized elsewhere.
+- Bullets that chain several helpers, clauses, or failure effects.
+- Anything included only because it appeared in the sketch.
