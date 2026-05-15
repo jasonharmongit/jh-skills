@@ -1,6 +1,6 @@
 ---
 name: summarize-sketch
-description: Turn a sketch into a short, skimmable plan-body narrative, then DM Jason on Slack using summarize_sketch_slack.py (one-line JSON for each slack_send_message call).
+description: Turn a sketch into a short, skimmable plan-body narrative, then post to the engineering Slack channel
 ---
 
 # Summarize Sketch
@@ -40,7 +40,7 @@ If anything fails any check, **edit that same file in place**, then re-run the p
 
 """
 Final word count: <replace with the wc -w integer>
-Ready for feedback! Once it's ready, I'll send it to Jason
+Ready for feedback! Once it's ready, I'll post it to the engineering channel
 """
 
 ### Step 4 - Stop for human review

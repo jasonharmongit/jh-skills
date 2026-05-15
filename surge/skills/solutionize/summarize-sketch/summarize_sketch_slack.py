@@ -9,7 +9,7 @@ import json
 import sys
 from pathlib import Path
 
-SLACK_DM_CHANNEL_ID = "U0APWBBSRC4"
+SLACK_CHANNEL_ID = "C07K7D69DK4"
 
 
 def die(message: str) -> None:
@@ -49,7 +49,7 @@ def cmd_parent(args: argparse.Namespace) -> None:
         die("Empty --title.")
     message = f"plan for [{title_stripped}]({args.linear}) :thread:"
     emit_slack_send_message_args(
-        {"channel_id": SLACK_DM_CHANNEL_ID, "message": message}
+        {"channel_id": SLACK_CHANNEL_ID, "message": message}
     )
 
 
@@ -62,7 +62,7 @@ def cmd_thread(args: argparse.Namespace) -> None:
     body = slice_from_first_title_line(without_frontmatter)
     emit_slack_send_message_args(
         {
-            "channel_id": SLACK_DM_CHANNEL_ID,
+            "channel_id": SLACK_CHANNEL_ID,
             "thread_ts": args.thread_ts,
             "message": body,
         }
