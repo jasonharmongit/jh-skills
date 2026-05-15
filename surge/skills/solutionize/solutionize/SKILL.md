@@ -33,7 +33,7 @@ Run these in order. Substance and section shape for each step live in `skills/<n
 1. **`current-state-story` skill** — When the synopsis is ready, call **CreatePlan** with:
    - **`name`:** a short, human-readable title for the issue, like a work item headline (e.g. `Add status dropdown filter to API logs`). Not a filename; not step numbers.
    - **`overview`:** use the same text as `name`.
-   - **`plan`:** **`## 1 - Describe current state`** followed by the synopsis body, verbatim.
+   - **`plan`:** **`## 1 - Current state story`** followed by the synopsis body, verbatim.
 
    **Stop** and wait for the partner's explicit proceed confirmation in chat before step **2**.
 

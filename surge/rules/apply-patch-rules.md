@@ -34,6 +34,7 @@
 - Never use terminal commands like cat or python scripts to write or edit files. Instead, use your native tools.
 - Prefer explicit control flow over conditional/no-op helpers.
   However, when a conditional/no-op helper is necessary, name it with `maybe_`.
+- Never use "copy" to mean on-screen UI text or labels (e.g. do not write "dashboard copy"); say "text", "labels", "wording", etc., instead. Reserve "copy" to refer to duplication, not UI surfaces.
 - CRITICAL: Always use ~~~ for formatting outermost codeblocks in your output. only use ``` for codeblocks that are nested inside.
 - only create a helper function if the logic is non-trivial (more than a single operation or check) AND reused. if the logic is only used in one place, inline it.
 - Keep function and module docs concise and high level. they should describe the general purpose of the thing, not specifics about how it works internally
@@ -59,3 +60,5 @@ purchaser_info_params = params["purchaser_info"] || %{}
 - prefer `||` over `or`
 - prefer `== nil` over `is_nil()` (and `!= nil` over `!is_nil`)
 - prefer `in` over multiple `or` checks on the same variable. for example, prefer `my_var in [nil, ""]` over `my_var == nil or my_var == ""`
+- always use `Repo.cursor_stream/2` to stream through rows in scripts
+- avoid built in negation (though occasionally it is warranted) - i.e. ignore_, not_, _exempt...etc.
