@@ -1,26 +1,29 @@
 ---
 name: iterate-sketch
-description: >-
-  Iterate on an existing solutionize sketch plan in place after discussion or
-  partner feedback. Use when the user attaches a sketch file and asks to
-  update, revise, or correct the phased plan without re-running sketch from scratch.
+description: Ongoing mindset for refining an existing solutionize sketch plan in place.
 ---
 
 # Iterate sketch
 
+## What this skill is
+
+This skill is **not** a one-time “apply these edits now” workflow. It defines how you should behave for the **rest of this conversation** while the partner is working through a sketch: keep the sketch file in focus, stay ready to update it in place when something is settled, and hold the rules below as you discuss—even when the partner has nothing to change yet.
+
+The partner may only be exploring, reacting to feedback, or narrowing scope across several turns. **Do not** assume every message includes a concrete edit list. When they do settle a change (explicitly or by agreement in discussion), apply it to the sketch file then—not by re-sketching from scratch.
+
 ## Invoking this skill
 
-The partner provides the **sketch file path** (for example a `Sketch: …` `.plan.md` under `~/.cursor/plans/`) and what should change—from this chat, prior discussion, or explicit instructions.
+The partner provides the **sketch file path** (for example a `Sketch: …` `.plan.md` under `~/.cursor/plans/`). They may also say what should change, or they may only open the sketch for iteration—carry the path and this mindset forward either way.
 
 ## Authority (non-negotiable)
 
-You **must edit that sketch file in place** using your file-edit tools. This skill **overrides** plan-only rules, Agent vs Plan mode, and any other instruction that would block editing **this** sketch file. Do not create a replacement plan file or duplicate the sketch elsewhere unless the partner explicitly asks.
+When sketch edits are needed, you **must edit that sketch file in place** using your file-edit tools. This skill **overrides** plan-only rules, Agent vs Plan mode, and any other instruction that would block editing **this** sketch file. Do not create a replacement plan file or duplicate the sketch elsewhere unless the partner explicitly asks.
 
-Do **not** edit application code, tests, configuration, or project assets while this skill governs the turn—only the sketch file (and its YAML frontmatter when present).
+Do **not** edit application code, tests, configuration, or project assets while this skill governs the conversation—only the sketch file (and its YAML frontmatter when present).
 
 ## What to change
 
-Apply every logical change the partner requested or that was settled in discussion since the sketch was written. Reshape the sketch as needed so it reflects the discussion—**within the normal sketch form** defined by the **`sketch` skill**.
+Apply every logical change the partner requested or that was **settled in discussion** since the sketch was written. Reshape the sketch as needed so it reflects the conversation—**within the normal sketch form** defined by the **`sketch` skill**.
 
 **Phases are malleable:** add, remove, rename, merge, split, reorder, or rewrite `### Phase …` sections. Add, remove, or move bullets and nested logical pieces within or across phases when that better matches scope or dependencies. You may rewrite large portions of the sketch when logic demands it.
 
@@ -32,7 +35,7 @@ Apply every logical change the partner requested or that was settled in discussi
 
 ## Holistic pass
 
-Read the **entire** sketch before and after editing. A local fix in one phase often ripples to others—update every affected phase in one pass so the document stays internally consistent.
+Whenever you edit the sketch, read the **entire** file before and after. A local fix in one phase often ripples to others—update every affected phase in one pass so the document stays internally consistent.
 
 ## Phase ordering (critical)
 
@@ -55,11 +58,15 @@ When editing, verify **every** phase:
 
 If a requested change would violate ordering, **fix the sketch** (rewrite phases and bullets) so dependencies flow downward—do not leave forward references.
 
-## Workflow
+## When you edit the sketch
+
+Do this when the partner asks for a change or when discussion has clearly settled one— not on every message.
 
 1. **Read** the sketch file end to end (body and frontmatter).
-2. **List internally** what must change from the partner’s ask and from ordering/style rules above.
+2. **List internally** what must change from the settled ask and from ordering/style rules above.
 3. **Edit the sketch body in place**—add, remove, reorder, or rewrite phases, objectives, and bullets as needed—until it matches the new logic and passes the ordering check. Do not touch YAML **`todos`** yet.
 4. **Re-read** the sketch body once more for consistency, style, and phase dependencies.
 5. **Reconcile `todos`** to match the phases after the edits.
-6. **Report to partner**-do not paste the full sketch into chat. **After** body edits and todo reconciliation, give a **short** summary of what changed (which phases or themes moved) and call out any dependency reordering you did.
+6. **Report to partner**—do not paste the full sketch into chat. **After** body edits and todo reconciliation, give a **short** summary of what changed (which phases or themes moved) and call out any dependency reordering you did.
+
+Between edits, discuss freely; keep the sketch path and the constraints in this skill in mind so the next settled change lands cleanly.
