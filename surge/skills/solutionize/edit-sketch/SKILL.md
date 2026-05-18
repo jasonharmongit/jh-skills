@@ -20,15 +20,13 @@ Do **not** edit application code, tests, configuration, or project assets while 
 
 ## What to change
 
-Apply every logical change the partner requested or that was settled in discussion since the sketch was written. You may **rewrite large portions** of a phase or the whole sketch when logic demands it.
+Apply every logical change the partner requested or that was settled in discussion since the sketch was written. Reshape the sketch as needed so it reflects the discussion—**within the normal sketch form** defined by the **`sketch` skill**.
 
-**Preserve sketch style:** match the existing document’s formatting, tone, and concise prose. Follow the same conventions as the **`sketch` skill** (symbol-level bullets, file links, one **Objective** per phase, nested bullets—not walls of prose). Do not introduce a different outline or voice.
+**Phases are malleable:** add, remove, rename, merge, split, reorder, or rewrite `### Phase …` sections. Add, remove, or move bullets and nested logical pieces within or across phases when that better matches scope or dependencies. You may rewrite large portions of the sketch when logic demands it.
 
-**Do not expand structure:**
+**Keep phases small and ordered:** each phase should represent one small, logical chunk of work. Prefer more concise phases over fewer bloated ones. Phases stay in execution order (see below).
 
-- Do **not** add new top-level sections to the sketch body (for example a new `##` block beyond what is already there).
-- Do **not** add new `### Phase …` sections or new major subsections inside a phase.
-- You **may** add, remove, or rewrite bullets **within** existing phases and sections.
+**Stay within sketch style (non-negotiable):** follow the **`sketch` skill** and match the file’s existing tone—ordered `### Phase …` sections with one **Objective**, file links, and symbol-level nested bullets only. No top-level `##` blocks or extra scaffolding (for example **Depends on**, **Risks**, recap); express dependencies through phase order and bullets.
 
 ## Holistic pass
 
@@ -59,7 +57,7 @@ If a requested change would violate ordering, **fix the sketch** (rewrite phases
 
 1. **Read** the sketch file end to end (body and frontmatter).
 2. **List internally** what must change from the partner’s ask and from ordering/style rules above.
-3. **Edit the sketch body in place**—phases, objectives, and bullets—until it matches the new logic and passes the ordering check. Do not touch YAML **`todos`** yet.
+3. **Edit the sketch body in place**—add, remove, reorder, or rewrite phases, objectives, and bullets as needed—until it matches the new logic and passes the ordering check. Do not touch YAML **`todos`** yet.
 4. **Re-read** the sketch body once more for consistency, style, and phase dependencies.
 5. **Reconcile `todos`** to match the phases after the edits.
 6. **Report to partner**-do not paste the full sketch into chat. **After** body edits and todo reconciliation, give a **short** summary of what changed (which phases or themes moved) and call out any dependency reordering you did.
