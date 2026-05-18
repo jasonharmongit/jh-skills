@@ -62,11 +62,12 @@ If a requested change would violate ordering, **fix the sketch** (rewrite phases
 
 Do this when the partner asks for a change or when discussion has clearly settled one— not on every message.
 
-1. **Read** the sketch file end to end (body and frontmatter).
+1. **Read** the sketch file end to end (body and frontmatter). For every todo with **`status: completed`**, keep an **internal snapshot** of that phase's matching **`### Phase …`** section (title, objective, bullets)—before any edits. You will use this snapshot in step 7, not the post-reconcile **`todos`**.
 2. **List internally** what must change from the settled ask and from ordering/style rules above.
 3. **Edit the sketch body in place**—add, remove, reorder, or rewrite phases, objectives, and bullets as needed—until it matches the new logic and passes the ordering check. Do not touch YAML **`todos`** yet.
 4. **Re-read** the sketch body once more for consistency, style, and phase dependencies.
 5. **Reconcile `todos`** to match the phases after the edits.
 6. **Report to partner**—do not paste the full sketch into chat. **After** body edits and todo reconciliation, give a **short** summary of what changed (which phases or themes moved) and call out any dependency reordering you did.
+7. **Completed phases you changed:** Compare each already-implemented phase from your step 1 snapshots to the **final** sketch body (after body edits and todo reconciliation). Match by phase **title** where it still exists; if a snapshotted phase was renamed, merged, or removed, treat that as a material change for that work. If **any** snapshotted section changed materially (objective, bullets, or scope), **ask the partner** whether they want you to update the **implementation code** for those phases so it matches the sketch. Do **not** edit application code on your own—wait for explicit approval (same bar as **`implement-next-phase`**). If nothing in the snapshots changed, skip this step.
 
 Between edits, discuss freely; keep the sketch path and the constraints in this skill in mind so the next settled change lands cleanly.
