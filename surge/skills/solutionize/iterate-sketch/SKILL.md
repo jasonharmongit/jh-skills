@@ -1,12 +1,12 @@
 ---
-name: edit-sketch
+name: iterate-sketch
 description: >-
-  Edit an existing solutionize sketch plan in place after discussion or
+  Iterate on an existing solutionize sketch plan in place after discussion or
   partner feedback. Use when the user attaches a sketch file and asks to
   update, revise, or correct the phased plan without re-running sketch from scratch.
 ---
 
-# Edit sketch
+# Iterate sketch
 
 ## Invoking this skill
 
@@ -28,6 +28,8 @@ Apply every logical change the partner requested or that was settled in discussi
 
 **Stay within sketch style (non-negotiable):** follow the **`sketch` skill** and match the file’s existing tone—ordered `### Phase …` sections with one **Objective**, file links, and symbol-level nested bullets only. No top-level `##` blocks or extra scaffolding (for example **Depends on**, **Risks**, recap); express dependencies through phase order and bullets.
 
+**Weave in phase callouts:** where it clarifies *why* or *what contract*, name other phases inline in objectives and bullets—a short parenthetical or clause, not a separate section. Examples: an earlier phase notes deferred work (**flat attrs only; Phase 6 adds private PATCH flattening**), a middle phase ties callers to a later contract (**read `recording_url` from flat attrs; Phase 6 adds flattening**), a later phase states what it consumes (**flat attr contract the Phase 2 changeset consumes**), etc. Use sparingly when reordering or adding bullets; update callouts if phase numbers shift.
+
 ## Holistic pass
 
 Read the **entire** sketch before and after editing. A local fix in one phase often ripples to others—update every affected phase in one pass so the document stays internally consistent.
@@ -40,7 +42,7 @@ When editing, verify **every** phase:
 
 - Earlier phases only introduce foundations later phases consume (migrations, schemas, contexts, APIs, workers, etc.).
 - Later phases do not assume symbols, data, or behavior that earlier phases have not already established.
-- Cross-phase references read forward in time only (Phase 2 may build on Phase 1; Phase 1 must not assume Phase 3 exists).
+- Implementation dependencies read forward in time only (Phase 2 may build on Phase 1; Phase 1 must not *implement* Phase 3’s symbols or behavior). Naming another phase in a bullet to explain a constraint or contract is fine (see **Weave in phase callouts** above).
 - **Tests last:** any test files, test cases, or test-only work the sketch calls for must live in the **final** phase—and only there. Earlier phases must not include test bullets. If edits introduce or scatter test work, **move** it into the last phase (merge into that phase’s bullets if needed).
 
 **Default layering (bottom-up):** when reordering or reshaping work, prefer this stack unless the existing sketch deliberately does otherwise:
