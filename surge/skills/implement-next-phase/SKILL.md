@@ -37,3 +37,5 @@ Use when the partner attaches this skill and provides the **sketch plan** path. 
 ## After approval
 
 When the partner approves, implement **only** that phase per the sketch and prior answers; keep scope tight. If approval was for a specific phase number, do not roll forward into the next phase without a new cycle of this skill or explicit instruction.
+
+**Immediately after** your implementation edits for that phase, edit the sketch plan file: set the active phase's todo **`status`** to **`completed`** in YAML frontmatter. Do this before any other follow-up work on the plan or codebase.
