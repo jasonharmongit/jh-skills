@@ -22,17 +22,17 @@ Per phase, include only:
 ### Phase 1 - <Title>
 **Objective:** exactly one sentence.
 - [Module.Or.Function](relative/path/to/file.ex)
-  - **updated_function_name**
+  - **handle_params/3** (existing symbol — use its real name)
     - One nested bullet per distinct logical point (ordering, data read, branch, side effect, callee).
     - Another point on its own line; do not chain many clauses in one dash.
-  - **new_function_name**
+  - **CopyVoicemailGreeting** (new symbol — use the concrete name you propose)
     - Same pattern: scan-friendly vertical list, not a wall of prose.
 
 Then continue in order as `Phase 2`, `Phase 3`, and so on.
 
 **Bullet hierarchy (step 4):** After the file link, each **symbol or named area** (for example **perform/1**, **send_message/4**, **Oban queues**) gets its own sub-bullet. Under that, use **one further indentation level** so **each new logical point** is its own line: inputs, preload, branch condition, transaction boundary, enqueue choice, cleanup, retry vs terminal failure, and so on. Avoid semicolon chains and single paragraphs that bundle unrelated beats—if you would separate ideas with "then" or "otherwise" in speech, they belong on separate nested bullets.
 
-Do not write vague bullets like "update logic" or "wire this up". Every bullet must name the exact symbol or code area being changed.
+Do not write vague bullets like "update logic" or "wire this up". Every bullet must name the exact symbol or code area being changed. For an existing function, module attribute, or test case, use its actual name (for example **twiml_voicemail/2**). For a new function, worker, migration, or file, use the concrete name you are proposing (for example **Surge.PhoneNumbers.CopyVoicemailGreeting** or **presigned_voicemail_greeting_url/1**) — never generic placeholders like **new_function_name** or **updated_function_name**.
 
 Prefer file-scoped bullets. When one logical change spans multiple files, use one cross-file bullet that names all affected files, and avoid repeating that same change in separate per-file bullets unless a file has a unique nuance.
 
