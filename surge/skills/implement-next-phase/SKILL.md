@@ -38,4 +38,6 @@ Use when the partner attaches this skill and provides the **sketch plan** path. 
 
 When the partner approves, implement **only** that phase per the sketch and prior answers; keep scope tight. If approval was for a specific phase number, do not roll forward into the next phase without a new cycle of this skill or explicit instruction.
 
+**No cross-phase scaffolding:** Do not change code so this phase can stand alone when the sketch defers work to a later phase. Do not add defaults, placeholders, temporary checks, stubs, no-ops, or similar bridging work to paper over gaps between this phase and a future one—**unless** the sketch explicitly requires that in this phase.
+
 **Immediately after** your implementation edits for that phase, edit the sketch plan file: set the active phase's todo **`status`** to **`completed`** in YAML frontmatter. Do this before any other follow-up work on the plan or codebase.
