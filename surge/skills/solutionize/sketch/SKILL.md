@@ -17,6 +17,23 @@ Sketch only changes that are required to deliver the chosen approach as settled 
 
 To reiterate: prefer the simplest code path that matches how the feature is actually used. Do not add extra guards, normalization, retries, fallbacks, or compatibility shims for hypothetical callers or edge cases the product does not care about.
 
+**Phase ordering:** Phases are executed **in order**. Nothing in an earlier phase may depend on work described only in a **later** phase.
+
+- Earlier phases only introduce foundations later phases consume (migrations, schemas, contexts, APIs, workers, etc.).
+- Later phases must not assume symbols, data, or behavior that earlier phases have not already established.
+- Cross-phase references read forward in time only (Phase 2 may build on Phase 1; Phase 1 must not assume Phase 3 exists).
+- **Tests last:** test files, test cases, and test-only work belong in the **final** phase—and only there. Earlier phases must not include test bullets.
+
+**Default layering (bottom-up):** unless the chosen approach deliberately does otherwise, stack phases in this order:
+
+1. Infrastructure and persistence (migrations, API layer, config, Oban/queues, external integrations)
+2. Schema / domain models
+3. Context and business logic
+4. Web boundary (controllers, LiveViews, views, routes)
+5. **Final phase only:** tests (and any polish that depends on completed implementation)
+
+If the natural breakdown would violate ordering, **reshape phases** so dependencies flow downward—do not leave forward references.
+
 Per phase, include only:
 
 ### Phase 1 - <Title>
@@ -54,6 +71,9 @@ Example phase:
   - **render/1**
     - Add a dropdown for `status_category` in header actions.
     - Patch URLs so pagination and search keep the selected value.
+
+### Phase 2 - Tests
+**Objective:** Cover status-category filtering and invalid URL values.
 - [SurgeWeb.ApiRequestLiveTest](test/surge_web/live/api_request_live_test.exs)
   - **outcome filtering and invalid status_category**
     - Cover success and failed filtering.
