@@ -1,9 +1,9 @@
 ---
-name: current-state-story
+name: spike
 description: Produce a concise current-state narrative
 ---
 
-# Current state story
+# Spike
 
 ## Your goal
 

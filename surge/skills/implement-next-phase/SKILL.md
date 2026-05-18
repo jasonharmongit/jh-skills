@@ -7,7 +7,7 @@ description: Prepare to implement the next pending todo phase from a solutionize
 
 ## Invoking this skill
 
-Use when the partner attaches this skill and provides the **sketch plan** path. That plan includes YAML **`todos`** (one per phase, each **title** matches the corresponding **`### Phase N - …`** heading in **`plan`**) plus **`## 4 - Sketch solution`** in the body.
+Use when the partner attaches this skill and provides the **sketch plan** path. That plan includes YAML **`todos`** (one per phase, each **title** matches the corresponding **`### Phase N - …`** heading in **`plan`**) plus **`## 4 - Sketch`** in the body.
 
 **Non-negotiable:** Until the partner **explicitly approves** proceeding (for example: "go ahead," "implement," "proceed with Phase 2"), you **do not** edit application code, tests, config, or assets for the work. Preparation (reading, searching, analysis, questions) is allowed; building is not, until that approval.
 
@@ -21,7 +21,7 @@ Use when the partner attaches this skill and provides the **sketch plan** path. 
 
 2. **Pick the active phase from `todos`:** Take the **first** todo whose status is **`pending`** (or unset / not **`completed`**). That todo's **title** is the active phase label. If **`todos`** is missing, empty, or there is **no** pending item, **stop** and ask the partner to fix the plan or supply a proper solutionize sketch before continuing.
 
-3. **Orient to the sketch:** In **`## 4 - Sketch solution`**, open the **`### Phase N - …`** section whose heading text matches the active todo **title**; read that section's **Objective** and bullets for implementation scope. If **no** heading matches, **stop** and ask the partner to align todos with the sketch. Skim earlier phases in the sketch for ordering and dependencies.
+3. **Orient to the sketch:** In **`## 4 - Sketch`**, open the **`### Phase N - …`** section whose heading text matches the active todo **title**; read that section's **Objective** and bullets for implementation scope. If **no** heading matches, **stop** and ask the partner to align todos with the sketch. Skim earlier phases in the sketch for ordering and dependencies.
 
 4. **Gather context (read-only):**
    - Read completed-phase material the partner points to, or earlier sections of the same plan if they record what was done.

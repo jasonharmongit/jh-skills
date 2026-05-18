@@ -1,9 +1,9 @@
 ---
-name: approach-problem
+name: approach
 description: Produce named strategic options with file/line estimates and pros/cons
 ---
 
-# Approach problem
+# Approach
 
 ## Your goal
 
@@ -25,7 +25,7 @@ For every option after A, describe **only the differences from Option A**. Do no
 
 ## Anti-patterns to avoid
 
-- Do not include ordered implementation phases or per-file step lists (those belong in sketch-solution)
+- Do not include ordered implementation phases or per-file step lists (those belong in sketch)
 - Do not explain how you calculated file or line counts
 - Do not go syntax-level or deep into implementation details
 - Do not discuss parameter design, edge-case policies, or internal mechanics at this stage

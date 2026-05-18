@@ -1,13 +1,13 @@
 ---
-name: prepare-sketch
+name: interview
 description: Locked assumptions, questions, and follow-ups before a phased sketch
 ---
 
-# Prepare sketch
+# Interview
 
 ## Invoking this skill
 
-You must be in **Cursor Plan mode** for the entire duration. All output lives in a `.plan.md` file. Edit the file to include the `## 3 - Prepare sketch` section (or adjust the section number as appropriate for your context) with its body.
+You must be in **Cursor Plan mode** for the entire duration. All output lives in a `.plan.md` file. Edit the file to include the `## 3 - Interview` section (or adjust the section number as appropriate for your context) with its body.
 
 ## Your goal
 
@@ -66,14 +66,14 @@ Later questions (after initial answers, or anytime during the discussion) go her
 
 6. **Generate follow-up questions** — If answers are complete and clear, you may have no follow-ups. If you do have new questions, create a new `### Follow-up questions (N)` block (use the next index) and add them in the same format. Repeat step 4 and 5 until all necessary decisions are locked and you have high confidence in the path forward.
 
-7. **Ready for approval** — When you are satisfied that all necessary decisions are made and settled, respond in chat: "Prepare sketch is complete; ready for approval to proceed." Wait for the user's explicit proceed confirmation.
+7. **Ready for approval** — When you are satisfied that all necessary decisions are made and settled, respond in chat: "Interview is complete; ready for approval to proceed." Wait for the user's explicit proceed confirmation.
 
 ---
 
 ## Example
 
 ```markdown
-## Prepare sketch
+## Interview
 
 ### Locked assumptions
 

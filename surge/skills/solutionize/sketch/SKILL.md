@@ -1,19 +1,19 @@
 ---
-name: sketch-solution
+name: sketch
 description: Phased implementation-ready sketch with objectives and symbol-level bullets.
 ---
 
 Do not modify application code, tests, configuration, or project assets while this skill governs the turn. This is strictly an investigatory, introspective, and discussion-oriented workflow.
 
-## 4 - Sketch solution
+## 4 - Sketch
 
 **Output of this step:** an implementation-ready sketch using **ordered phases** for the chosen approach.
 
-Do not restate or recap the prepare-sketch step content in this section. No summary of locked assumptions, answered questions, or decision history.
+Do not restate or recap the interview step content in this section. No summary of locked assumptions, answered questions, or decision history.
 
 Write only the phased implementation sketch.
 
-Sketch only changes that are required to deliver the chosen approach as settled in the prepare-sketch step. Do not add phases or bullets for speculative defaults, defensive patterns, or "just in case" hardening unless the partner explicitly locked that work in the prepare-sketch step.
+Sketch only changes that are required to deliver the chosen approach as settled in the interview step. Do not add phases or bullets for speculative defaults, defensive patterns, or "just in case" hardening unless the partner explicitly locked that work in the interview step.
 
 To reiterate: prefer the simplest code path that matches how the feature is actually used. Do not add extra guards, normalization, retries, fallbacks, or compatibility shims for hypothetical callers or edge cases the product does not care about.
 
